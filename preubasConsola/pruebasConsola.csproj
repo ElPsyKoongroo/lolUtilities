@@ -1,15 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DLLs\" />
-    <Folder Include="src\Runes\" />
+    <Folder Include="DLL\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,7 +18,10 @@
 
   <ItemGroup>
     <Reference Include="LCUSharp">
-      <HintPath>..\preubasConsola\DLL\LCUSharp.dll</HintPath>
+      <HintPath>DLL\LCUSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive">
+      <HintPath>DLL\System.Reactive.dll</HintPath>
     </Reference>
   </ItemGroup>
 

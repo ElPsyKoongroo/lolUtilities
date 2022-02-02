@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lolClientUtilities"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -33,16 +37,23 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Viewbox Grid.Column="0">
-                <StackPanel>
-                    <Button x:Name="btn1" Content="Buscar LOL" Width="100" Height="20" Margin="5" Click="btn1_Click"/>
-                    <Button x:Name="btn2" Content="Get Runes" Width="100" Height="20" Margin="5" Click="btn2_Click"/>
-                    <Button x:Name="btn3" Content="Init wss" Width="100" Height="20" Margin="5" Click="btn3_Click"/>
-                    <Button x:Name="btn4" Content="Cerrar WS" Width="100" Height="20" Margin="5" Click="btn4_Click"/>
-                    <Button x:Name="btn5" Content="Get Runes WSS" Width="100" Height="20" Margin="5" Click="btn5_Click"/>
-                    <Button x:Name="btn6" Width="100" Height="20" Margin="5" Click="btn6_Click"/>
-                </StackPanel>
-            </Viewbox>
+            <StackPanel Grid.Column="0">
+                <Button x:Name="btn1" Content="Conectar al LOL" Width="100" Height="20" Margin="5" Click="btn1_Click"/>
+                <Button x:Name="btn2" Content="Boton 2" Width="100" Height="20" Margin="5" Click="btn2_Click"/>
+                <Button x:Name="btn3" Content="Boton 3" Width="100" Height="20" Margin="5" Click="btn3_Click"/>
+                <Button x:Name="btn4" Content="Boton 4" Width="100" Height="20" Margin="5" Click="btn4_Click"/>
+                <Button x:Name="btn5" Content="Boton 5" Width="100" Height="20" Margin="5" Click="btn5_Click"/>
+                <Button x:Name="btn6" Content="Boton 6" Width="100" Height="20" Margin="5" Click="btn6_Click"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <CheckBox Name="checkBoxAutoAccept" Content="Auto Accept" IsChecked="False"/>
+            </StackPanel>
+            
         </Grid>
+
+        <TextBlock Grid.Row="1" Grid.Column="2" 
+                   Name="txtGameStatus" 
+                   Text="{Binding Path=GameStatus}"/>
     </Grid>
 </Window>

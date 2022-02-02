@@ -75,6 +75,7 @@ namespace preubasConsola
 
             await api.RiotClientEndpoint.FlashUxAsync();
 
+            
             // Show the client.
             await api.RiotClientEndpoint.ShowUxAsync();
             await Task.Delay(1000);
@@ -351,6 +352,18 @@ namespace preubasConsola
                          "/lol-matchmaking/v1/ready-check/accept",
                          Enumerable.Empty<string>());
             }
+        }
+    }
+
+    #endregion
+
+    #region Prueba 6 Shutdown
+
+    public class Prueba6
+    {
+        public static void test()
+        {
+
         }
     }
 
