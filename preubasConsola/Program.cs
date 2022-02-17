@@ -51,7 +51,7 @@ namespace preubasConsola
     {
         public async static Task Main()
         {
-            Prueba4 p = new();
+            Prueba6 p = new();
 
             await p.test();
         }
@@ -180,6 +180,7 @@ namespace preubasConsola
     }
     #endregion
 
+    
     #region Prueba3 Paginas de runas
 
     public class Prueba3
@@ -357,13 +358,57 @@ namespace preubasConsola
 
     #endregion
 
-    #region Prueba 6 Shutdown
+    #region Prueba 6 GetChamps
 
     public class Prueba6
     {
-        public static void test()
-        {
+        public LeagueClientApi api;
 
+        public async Task test()
+        {
+            api = await LeagueClientApi.ConnectAsync();
+
+            long id;
+
+            Program.Log("Conectado Prueba 6");
+            ///lol-summoner/v1/current-summoner/account-and-summoner-ids;
+
+
+            var jsonID = await api.RequestHandler.GetJsonResponseAsync(HttpMethod.Get,
+                $"/lol-summoner/v1/current-summoner/account-and-summoner-ids");
+
+            id = (JObject.Parse(jsonID.ToString()) as dynamic).summonerId;
+
+            Console.WriteLine(id);
+
+            var json = await api.RequestHandler.GetJsonResponseAsync(HttpMethod.Get,
+                $"/lol-champions/v1/inventories/{id}/champions-minimal");
+
+            if(json == null)
+            {
+                Console.WriteLine("Nulo");
+                return;
+            }
+            //Console.WriteLine(json);
+
+            var js = JsonSerializer.Deserialize<List<object>>(json, new JsonSerializerOptions { IncludeFields = true });
+
+
+
+            foreach(var cham in js)
+            {
+                dynamic champ = JObject.Parse(cham.ToString());
+
+                //Console.WriteLine(champ);
+                Console.WriteLine($"Owned->\t {champ.ownership.owned}");
+                Console.WriteLine($"ID  ->\t {champ.id}");
+                Console.WriteLine($"Name->\t {champ.name}\n\n");
+            }
+
+            Console.WriteLine($"\n\nTotal-> {js.Count}");
+
+
+            Console.Read();
         }
     }
 

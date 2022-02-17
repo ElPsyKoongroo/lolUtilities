@@ -12,7 +12,9 @@ namespace lolClientUtilities.src
         {
             { "ChampSelectInfo", "/lol-champ-select/v1/session" },
             { "ClientStatus", "/lol-gameflow/v1/gameflow-phase" },
-            
+            { "SummonerAccountID", "/lol-summoner/v1/current-summoner/account-and-summoner-ids"},
+            { "AllChampsReduced", "/lol-champions/v1/inventories/{id}/champions-minimal" },
+            { "AllChamps", "/lol-champions/v1/inventories/{id}/champions" },
         };
         public static Dictionary<string, string> PostPaths = new()
         {

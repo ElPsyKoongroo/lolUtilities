@@ -52,8 +52,12 @@
             
         </Grid>
 
-        <TextBlock Grid.Row="1" Grid.Column="2" 
-                   Name="txtGameStatus" 
-                   Text="{Binding Path=GameStatus}"/>
+
+        <StackPanel Grid.Row="1" Grid.Column="2">
+            <TextBlock Name="txtGameStatus" 
+                       Text="{Binding Path=GameStatus}"/>
+
+            <TextBox x:Name="txtInputChamp" Text="{Binding Path=InputChamp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
     </Grid>
 </Window>
