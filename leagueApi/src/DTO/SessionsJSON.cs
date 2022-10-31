@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace preubasConsola.src
+namespace LeagueUtilities.DTO
 {
-
     public class SessionsJSON
     {
         public Action[][] actions { get; set; }
@@ -29,11 +28,11 @@ namespace preubasConsola.src
         public bool isSpectating { get; set; }
         public int localPlayerCellId { get; set; }
         public int lockedEventIndex { get; set; }
-        public Myteam[] myTeam { get; set; }
+        public Team[] myTeam { get; set; }
         public int recoveryCounter { get; set; }
         public int rerollsRemaining { get; set; }
         public bool skipChampionSelect { get; set; }
-        public Theirteam[] theirTeam { get; set; }
+        public Team[] theirTeam { get; set; }
         public Timer timer { get; set; }
         public object[] trades { get; set; }
     }
@@ -78,22 +77,7 @@ namespace preubasConsola.src
         public string type { get; set; }
     }
 
-    public class Myteam
-    {
-        public string assignedPosition { get; set; }
-        public int cellId { get; set; }
-        public int championId { get; set; }
-        public int championPickIntent { get; set; }
-        public string entitledFeatureType { get; set; }
-        public int selectedSkinId { get; set; }
-        public UInt64 spell1Id { get; set; }
-        public UInt64 spell2Id { get; set; }
-        public UInt64 summonerId { get; set; }
-        public int team { get; set; }
-        public int wardSkinId { get; set; }
-    }
-
-    public class Theirteam
+    public class Team
     {
         public string assignedPosition { get; set; }
         public int cellId { get; set; }
