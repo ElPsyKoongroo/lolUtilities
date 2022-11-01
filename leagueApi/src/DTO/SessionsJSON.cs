@@ -21,16 +21,16 @@ namespace LeagueUtilities.DTO
         public Chatdetails chatDetails { get; set; }
         public int counter { get; set; }
         public Entitledfeaturestate entitledFeatureState { get; set; }
-        public int gameId { get; set; }
+        public ulong gameId { get; set; }
         public bool hasSimultaneousBans { get; set; }
         public bool hasSimultaneousPicks { get; set; }
         public bool isCustomGame { get; set; }
         public bool isSpectating { get; set; }
         public int localPlayerCellId { get; set; }
-        public int lockedEventIndex { get; set; }
+        public long lockedEventIndex { get; set; }
         public Team[] myTeam { get; set; }
-        public int recoveryCounter { get; set; }
-        public int rerollsRemaining { get; set; }
+        public long recoveryCounter { get; set; }
+        public long rerollsRemaining { get; set; }
         public bool skipChampionSelect { get; set; }
         public Team[] theirTeam { get; set; }
         public Timer timer { get; set; }
@@ -52,17 +52,17 @@ namespace LeagueUtilities.DTO
 
     public class Entitledfeaturestate
     {
-        public int additionalRerolls { get; set; }
+        public long additionalRerolls { get; set; }
         public object[] unlockedSkinIds { get; set; }
     }
 
     public class Timer
     {
-        public int adjustedTimeLeftInPhase { get; set; }
-        public long internalNowInEpochMs { get; set; }
+        public ulong adjustedTimeLeftInPhase { get; set; }
+        public ulong internalNowInEpochMs { get; set; }
         public bool isInfinite { get; set; }
         public string phase { get; set; }
-        public int totalTimeInPhase { get; set; }
+        public ulong totalTimeInPhase { get; set; }
     }
 
     public class Action
@@ -73,7 +73,7 @@ namespace LeagueUtilities.DTO
         public int id { get; set; }
         public bool isAllyAction { get; set; }
         public bool isInProgress { get; set; }
-        public int pickTurn { get; set; }
+        public long pickTurn { get; set; }
         public string type { get; set; }
     }
 
@@ -84,7 +84,7 @@ namespace LeagueUtilities.DTO
         public int championId { get; set; }
         public int championPickIntent { get; set; }
         public string entitledFeatureType { get; set; }
-        public int selectedSkinId { get; set; }
+        public long selectedSkinId { get; set; }
         public UInt64 spell1Id { get; set; }
         public UInt64 spell2Id { get; set; }
         public UInt64 summonerId { get; set; }

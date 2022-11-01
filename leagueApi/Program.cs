@@ -19,10 +19,17 @@ namespace LeagueAPI
     {
         public async static Task Main()
         {
+           
             League n = new();
-            n.addBans(22,1,2);
+            n.addBans(35,45,105);
+            n.addPick(517,555,53);
 
             await n.connect();
+
+            Console.ReadKey();
+
+            n.disconnect();
+
         }
 
         public static void Log(string log)
