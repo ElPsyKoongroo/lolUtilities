@@ -1,17 +1,4 @@
 using Serilog;
-using Serilog.Sinks.File;
-using LCUSharp.Websocket;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using LCUSharp;
 
 
@@ -25,7 +12,6 @@ public partial class League
     
     public League()
     {
-
         CreateLogger();
 
         _events = new();
@@ -44,8 +30,6 @@ public partial class League
 
         championId = 0;
     }
-    
-    
 
     public void addBans(params int[] championsId){
         Array.ForEach(championsId, x=> champsToBanId.Add(x));
@@ -63,7 +47,7 @@ public partial class League
         _events.Add("gameflowEvent", OnGameflowEvent);
         _events.Add("sessionEvent", OnSessionEvent);
 
-        api.Disconnected += Api_Disconnected;
+        api.Disconnected += OnDisconnected;
     }
 
     private void eventSuscribe(string uri, string leagueEvent){
@@ -93,7 +77,7 @@ public partial class League
     }
     public void disconnect(){
         if(api is null) return;
-        api.Disconnected -= Api_Disconnected!;
+        api.Disconnected -= OnDisconnected!;
         api.Disconnect();
     }
 }

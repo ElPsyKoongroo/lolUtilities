@@ -1,17 +1,5 @@
 using Serilog;
 using LCUSharp.Websocket;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using LCUSharp;
 using LeagueUtilities.DTO;
 
 namespace LeagueUtilities;
@@ -74,13 +62,10 @@ public partial class League{
         }
     }
     
-    private async void Api_Disconnected(object? sender, EventArgs e)
+    private async void OnDisconnected(object? sender, EventArgs e)
     {
         if (api is null) return;
         await api.ReconnectAsync();
     }
-
-
-
 
 }

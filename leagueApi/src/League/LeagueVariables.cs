@@ -1,6 +1,10 @@
-using Serilog;
-using LCUSharp.Websocket;
-using LCUSharp;
+global using Serilog;
+global using Serilog.Events;
+global using LCUSharp.Websocket;
+global using LCUSharp;
+global using System.Linq;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
 
 using LeagueUtilities.DTO;
 

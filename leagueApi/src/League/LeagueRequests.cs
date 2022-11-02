@@ -15,7 +15,7 @@ public partial class League
         if (response is null) return;
 
         
-        var data = System.Text.Json.JsonSerializer.Deserialize<SummonerJSON>(response, 
+        var data = JsonSerializer.Deserialize<SummonerJSON>(response, 
             new JsonSerializerOptions()
             {
                 IncludeFields = true,
