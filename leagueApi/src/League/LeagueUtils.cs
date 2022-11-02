@@ -6,7 +6,7 @@ namespace LeagueUtilities;
 
 public partial class League
 {
-    private TimeSpan getTimeSpanBetween(int start, int end){
+    static public TimeSpan getTimeSpanBetween(int start, int end){
         return TimeSpan.FromSeconds( ( Random.Shared.Next(start * 10, end * 10) ) / 10.0 );
     }
     

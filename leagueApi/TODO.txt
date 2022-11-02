@@ -11,3 +11,5 @@
         solo cuando se entre a partida y quitarse al finalizar la fase de pick/bans
 
 4 - Crear los metodos publicos para que la interfaz se pueda comunicar bien con la clase
+
+102309419 A

@@ -1,4 +1,3 @@
-
 namespace LeagueUtilities.DTO
 {
     public class SummonerJSON

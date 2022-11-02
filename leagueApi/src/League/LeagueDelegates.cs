@@ -5,62 +5,59 @@ using LeagueUtilities.DTO;
 namespace LeagueUtilities;
 
 public partial class League{
-
+/*
+  ReadyCheck -> Aceptar partida
+  None -> Entrar al lol. Sin estar en el lobby.
+  Lobby -> Estás en lobby.
+  Matchmaking -> En queue.
+  ChampSelect -> self explanatory.
+  InProgress -> entrando en partida/ en partida.
+  WaitingForStats -> stats.
+*/
     private async void OnGameflowEvent(object? sender, LeagueEvent e)
     {
         if(api is null) return;
 
-        if (e.Data.ToString() == "ReadyCheck")
+        string msg = e.Data.ToString();
+
+        switch(msg)
         {
-            await Task.Delay(getTimeSpanBetween(1,2));
-            var json = await api
+            case "Lobby":
+            {
+                pickBan?.Finish();
+
+                break;
+            }
+            case "ReadyCheck":
+            {
+                await Task.Delay(getTimeSpanBetween(1,2));
+                var json = await api
                         .RequestHandler
                         .GetJsonResponseAsync(HttpMethod.Post,
                         "/lol-matchmaking/v1/ready-check/accept",
                         Enumerable.Empty<string>());
-        }
-    }
-    private async void OnSessionEvent(object? sender, LeagueEvent e){
-        if ( api is null ) return;
-
-        var sessionData = e.Data.ToObject<SessionsJSON>();
-        if (sessionData is null) return;
-        
-        if(ActorCellID == -1) ActorCellID = sessionData.localPlayerCellId;
-
-
-        if(sessionData.timer.phase == "PLANNING")
-        {
-            if(!hasPrepicked){
-                hasPrepicked = true;
-                await prePick(sessionData);
-                return;
+                break;
             }
-        }
-        else if (sessionData.timer.phase == "BAN_PICK")
-        {
-            if(!hasBanned){
-                hasBanned = true;
-                await ban(sessionData);
-                return;
+            case "MatchMaking":
+            {
+                pickBan?.Finish();
+                break;
             }
-            
-            if(!hasPicked && sessionData.actions[BANS_REVEAL_ACTION][0].completed){
-                System.Console.WriteLine("PARA PICKEAR");
-                hasPicked = true;
-                await pick(sessionData);
-                return;
+            case "ChampSelect":
+            {   
+                pickBan = new(api, SummonerId, true, true);
+                pickBan.SetPicks(champsToBanId,champsToPickId);
+                break;
             }
-        }
-        else{
-            if(!hasPickSkin){
-                hasPickSkin = true;
-                await skinPick();
-                return;
+            case "InProgress":
+            {
+                pickBan?.Finish();
+                break;
             }
             
         }
     }
+
     
     private async void OnDisconnected(object? sender, EventArgs e)
     {

@@ -15,6 +15,8 @@ public class Program
 
         Console.ReadKey();
 
+        await n.getSelectChampion();
+
         n.disconnect();
 
     }
