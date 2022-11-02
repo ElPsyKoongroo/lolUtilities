@@ -13,6 +13,7 @@ public partial class League{
   ChampSelect -> self explanatory.
   InProgress -> entrando en partida/ en partida.
   WaitingForStats -> stats.
+  EndOfGame -> stats
 */
     private async void OnGameflowEvent(object? sender, LeagueEvent e)
     {
