@@ -5,6 +5,9 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <LangVersion>10</LangVersion>
+    <Company>ElPsyKoongroo</Company>
+    <NeutralLanguage>es-ES</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,79 +1,35 @@
-using LCUSharp.Websocket;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using LCUSharp;
+using Serilog;
 using LeagueUtilities.DTO;
-
 namespace LeagueUtilities;
 
-public partial class League{
+public partial class League
+{
+    private async Task getSummoner(){
+        if(api is null ) return;
 
-    private async void OnGameflowEvent(object sender, LeagueEvent e)
-    {
-        if(api is null) return;
-
-        if (e.Data.ToString() == "ReadyCheck")
-        {
-            await Task.Delay(getTimeSpanBetween(1,2));
-            var json = await api
-                        .RequestHandler
-                        .GetJsonResponseAsync(HttpMethod.Post,
-                        "/lol-matchmaking/v1/ready-check/accept",
-                        Enumerable.Empty<string>());
-        }
-    }
-    private async void OnSessionEvent(object sender, LeagueEvent e){
-        if ( api is null ) return;
-
-        var sessionData = e.Data.ToObject<SessionsJSON>();
-        if (sessionData is null) return;
+        string response = await api.RequestHandler
+            .GetJsonResponseAsync(HttpMethod.Get,
+                "lol-summoner/v1/current-summoner");
         
-        if(ActorCellID == -1) ActorCellID = sessionData.localPlayerCellId;
+        if (response is null) return;
 
+        
+        var data = System.Text.Json.JsonSerializer.Deserialize<SummonerJSON>(response, 
+            new JsonSerializerOptions()
+            {
+                IncludeFields = true,
+                PropertyNameCaseInsensitive = true
+            }
+        );
 
-        if(sessionData.timer.phase == "PLANNING")
-        {
-            if(!hasPrepicked){
-                hasPrepicked = true;
-                await prePick(sessionData);
-                return;
-            }
-        }
-        else if (sessionData.timer.phase == "BAN_PICK")
-        {
-            if(!hasBanned){
-                hasBanned = true;
-                await ban(sessionData);
-                return;
-            }
-            
-            if(!hasPicked && sessionData.actions[BANS_REVEAL_ACTION][0].completed){
-                System.Console.WriteLine("PARA PICKEAR");
-                hasPicked = true;
-                await pick(sessionData);
-                return;
-            }
-        }
-        else{
-            if(!hasPickSkin){
-                hasPickSkin = true;
-                await skinPick();
-                return;
-            }
-            
-        }
+        if(data is null) return;
+
+        SummonerId = data.SummonerId;
+
     }
-
-    private async Task prePick(SessionsJSON sessionData){
+    
+        private async Task prePick(SessionsJSON sessionData){
 
         if(champsToPickId.Count == 0) return;
 
@@ -211,28 +167,4 @@ public partial class League{
                         );
 
     }
-    private async Task getSummoner(){
-        if(api is null ) return;
-
-        string response = await api.RequestHandler
-                         .GetJsonResponseAsync(HttpMethod.Get,
-                         "lol-summoner/v1/current-summoner");
-        
-        if (response is null) return;
-
-        
-        var data = System.Text.Json.JsonSerializer.Deserialize<SummonerJSON>(response, 
-            new JsonSerializerOptions()
-            {
-                IncludeFields = true,
-                PropertyNameCaseInsensitive = true
-            }
-        );
-
-        if(data is null) return;
-
-        SummonerId = data.SummonerId;
-
-    }
-
 }

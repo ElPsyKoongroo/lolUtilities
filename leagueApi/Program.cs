@@ -13,31 +13,23 @@ using System.Threading.Tasks;
 using LCUSharp;
 using LeagueUtilities;
 
-namespace LeagueAPI
+namespace LeagueAPI;
+
+public class Program
 {
-    public class Program
+    public static async Task Main()
     {
-        public async static Task Main()
-        {
-           
-            League n = new();
-            n.addBans(35,45,105);
-            n.addPick(517,555,53);
+        
+        League n = new();
+        n.addBans(114,105,67);
+        n.addPick(238,35,134);
 
-            await n.connect();
+        await n.connect();
 
-            Console.ReadKey();
+        Console.ReadKey();
 
-            n.disconnect();
+        n.disconnect();
 
-        }
-
-        public static void Log(string log)
-        {
-            string hora = DateTime.Now.ToString("HH:mm:ss");
-            Console.WriteLine($"[{hora}]  {log}");
-        }
     }
-
-
 }
+

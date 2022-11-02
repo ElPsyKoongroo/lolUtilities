@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lolClientUtilities", "lolClientUtilities\lolClientUtilities.csproj", "{0019E9D0-3129-4210-9F6F-F5898C53AB11}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pruebasConsola", "preubasConsola\pruebasConsola.csproj", "{406084D8-62C2-4416-9E7E-9ABCF61D077A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueApi", "leagueapi\LeagueApi.csproj", "{406084D8-62C2-4416-9E7E-9ABCF61D077A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

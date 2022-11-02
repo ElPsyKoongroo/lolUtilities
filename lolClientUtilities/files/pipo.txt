@@ -5,11 +5,11 @@
 |                                                               |
 |        AutoAccept ▢           Preferable Pick-Ban ▢           |
 |                                                               |
-|        RuneSelect |     v|    RuneManager  ⚙️                 L
+|        RuneSelect |     v|  ⚙️                                L
 |                                                               |
-|        PlayAgain ▢            ShowImportantStats ▢            |
+|                               ShowImportantStats ▢            |
 |                                                               |
-|        AutoInvite |     v|⚙️  ChampionChanges                 L
+|                               ChampionChanges                 |
 |                                                               |
 |        Summoners                                              |
 -----------------------------------------------------------------

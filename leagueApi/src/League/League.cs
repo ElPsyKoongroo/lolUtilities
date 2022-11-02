@@ -1,5 +1,5 @@
-global using Serilog;
-global using Serilog.Sinks.File;
+using Serilog;
+using Serilog.Sinks.File;
 using LCUSharp.Websocket;
 using Newtonsoft.Json;
 using System;
@@ -16,20 +16,54 @@ using LCUSharp;
 
 
 using LeagueUtilities.DTO;
+using Serilog.Events;
 
 namespace LeagueUtilities;
 
 public partial class League
 {
-    Dictionary<string, EventHandler<LeagueEvent>> _events;
-    LeagueClientApi? api;
+    
+    public League()
+    {
+
+        CreateLogger();
+
+        _events = new();
+        ActorCellID = -1;
+        SummonerId = 0;
+
+        prePicks = new();
+        bannedAlready = new();
+        champsToBanId = new();
+        hasBanned = false;
+
+        hasPrepicked = false;
+        hasPicked = false;
+        champsToPickId = new();
+        hasPickSkin = false;
+
+        championId = 0;
+    }
+    
+    
+
+    public void addBans(params int[] championsId){
+        Array.ForEach(championsId, x=> champsToBanId.Add(x));
+    }
+
+    public void addPick(params int[] championsId){
+        Array.ForEach(championsId, x=> champsToPickId.Add(x));
+    }
+    
     private void setEvents(){
         if(api is null) return;
+        
+        
 
-        _events.Add("gameflowEvent", new EventHandler<LeagueEvent>(OnGameflowEvent!));
-        _events.Add("sessionEvent", new EventHandler<LeagueEvent>(OnSessionEvent!));
+        _events.Add("gameflowEvent", OnGameflowEvent);
+        _events.Add("sessionEvent", OnSessionEvent);
 
-        api.Disconnected += Api_Disconnected!;
+        api.Disconnected += Api_Disconnected;
     }
 
     private void eventSuscribe(string uri, string leagueEvent){
@@ -44,9 +78,11 @@ public partial class League
     }
     public async Task connect()
     {
+        Log.Debug("Contectando con el cliente del lol");
         api = await LeagueClientApi.ConnectAsync();
 
         if(api is null) throw new Exception("No se ha podido conectar al cliente");
+        Log.Debug("Contectado al cliente del lol");
 
         setEvents();
         await getSummoner();
@@ -60,12 +96,4 @@ public partial class League
         api.Disconnected -= Api_Disconnected!;
         api.Disconnect();
     }
-
-    private async void Api_Disconnected(object sender, EventArgs e)
-    {
-        if (api is null) return;
-        await api.ReconnectAsync();
-    }
-
-    
 }
