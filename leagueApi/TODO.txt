@@ -1,0 +1,13 @@
+1 - Loggear un poco las cosas
+    - Log.Debug(error(si hay), "mensajito", variables(si hay))
+    - Log.Information(...)
+
+    Log.Information va a consola y fichero
+    Log.Deebug solo a fichero
+
+2 - Crear una clase que se encargue de prePick/ban/pick/pickSkin
+
+3 - El evento OnSessionEvent se tiene que asociar al evento del lol 
+        solo cuando se entre a partida y quitarse al finalizar la fase de pick/bans
+
+4 - Crear los metodos publicos para que la interfaz se pueda comunicar bien con la clase

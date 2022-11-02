@@ -21,7 +21,8 @@ public partial class League
             .WriteTo.File(
                 path: logFilePath,
                 outputTemplate: formato,
-                restrictedToMinimumLevel: LogEventLevel.Debug)
+                restrictedToMinimumLevel: LogEventLevel.Debug,
+                rollingInterval: RollingInterval.Day)
             .WriteTo.Console(
                 outputTemplate: formato,
                 restrictedToMinimumLevel: LogEventLevel.Information)

@@ -16,8 +16,6 @@ public partial class League{
     private const int PICK_ACTION = 2;
     
     private readonly Dictionary<string, EventHandler<LeagueEvent>> _events;
-    private readonly ILogger _logC;
-    private readonly ILogger _logF;
     LeagueClientApi? api;
     
     

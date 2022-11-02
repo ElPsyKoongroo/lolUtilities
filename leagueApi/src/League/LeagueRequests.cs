@@ -16,7 +16,7 @@ public partial class League
 
         
         var data = JsonSerializer.Deserialize<SummonerJSON>(response, 
-            new JsonSerializerOptions()
+            new JsonSerializerOptions
             {
                 IncludeFields = true,
                 PropertyNameCaseInsensitive = true
