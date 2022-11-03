@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using System.ComponentModel;
+using System.Windows.Input;
 
 
 /*
@@ -20,5 +20,12 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
     }
+
+    private void MoverVentana(object sender, MouseButtonEventArgs e)
+    {
+        if(e.LeftButton == MouseButtonState.Pressed)
+            DragMove();
+    }
+
 }
 

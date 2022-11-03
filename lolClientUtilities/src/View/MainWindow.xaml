@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:lolClientUtilities"
         xmlns:vm="clr-namespace:lolClientUtilities.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
@@ -13,42 +12,63 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
+        Name="Window"
         >
     <Window.Resources>
         <vm:MainWindowViewModel x:Key="ViewModel"/>
     </Window.Resources>
-    
+
     <Border BorderThickness="1" 
-            CornerRadius="20"
+            CornerRadius="10"
             UseLayoutRounding="True"
             ClipToBounds="True"
-            Padding="5">
+            BorderBrush="#c1af8c"
+            >
         
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="#602090" Offset="0.0" />
-                <GradientStop Color="#9070e0" Offset="1.0" />
+                <GradientStop Color="#051825" Offset="0.0" />
+                <GradientStop Color="#1b3a47" Offset="1.0" />
             </LinearGradientBrush>
         </Border.Background>
-        <Grid DataContext="{StaticResource ViewModel}"
-              ClipToBounds="True"
-              Background="Transparent">
+        
+        <StackPanel>
+        
+            <Border Height="40" Background="Transparent"
+                       UseLayoutRounding="True"
+                       CornerRadius="10, 10, 0, 0"
+                       BorderThickness="0"
+                       ClipToBounds="True"
+                       MouseDown="MoverVentana"
+                       Name="BorderMove"/>
             
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="20"/>
-            </Grid.RowDefinitions>
+            <Line Stroke="#1c3c4b" StrokeThickness="1"
+                  X1="0" X2="800"
+                  Y1="1" Y2="1"/>
+            
+            <Grid DataContext="{StaticResource ViewModel}"
+                  ClipToBounds="True"
+                  Background="Transparent"
+                  IsHitTestVisible="True"
+                  >
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
 
-            <Label Grid.Column="1" Grid.Row="1"
-                Content="{Binding Text}" FontSize="30"/>
-        </Grid>
+                <Label Grid.Column="1" Grid.Row="1"
+                       Content="{Binding Text}" FontSize="30"/>
+            </Grid>
+        </StackPanel>
     </Border>
+
 </Window>
