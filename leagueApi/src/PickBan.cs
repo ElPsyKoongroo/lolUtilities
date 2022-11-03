@@ -1,7 +1,7 @@
 using LeagueUtilities.DTO;
 namespace LeagueUtilities;
 
-public partial class PickBan
+internal partial class PickBan
 {
     LeagueClientApi api;
     private long SummonerId;

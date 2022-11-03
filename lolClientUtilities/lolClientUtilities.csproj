@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <Folder Include="DLLs\" />
-    <Folder Include="src\Runes\" />
+    <Folder Include="src\Model" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +24,18 @@
     <Reference Include="LCUSharp">
       <HintPath>..\preubasConsola\DLL\LCUSharp.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\leagueapi\LeagueApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="src\View\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

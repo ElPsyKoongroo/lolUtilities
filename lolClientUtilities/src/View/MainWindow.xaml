@@ -1,0 +1,54 @@
+﻿<Window x:Class="lolClientUtilities.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lolClientUtilities"
+        xmlns:vm="clr-namespace:lolClientUtilities.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        >
+    <Window.Resources>
+        <vm:MainWindowViewModel x:Key="ViewModel"/>
+    </Window.Resources>
+    
+    <Border BorderThickness="1" 
+            CornerRadius="20"
+            UseLayoutRounding="True"
+            ClipToBounds="True"
+            Padding="5">
+        
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#602090" Offset="0.0" />
+                <GradientStop Color="#9070e0" Offset="1.0" />
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid DataContext="{StaticResource ViewModel}"
+              ClipToBounds="True"
+              Background="Transparent">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="1" Grid.Row="1"
+                Content="{Binding Text}" FontSize="30"/>
+        </Grid>
+    </Border>
+</Window>
