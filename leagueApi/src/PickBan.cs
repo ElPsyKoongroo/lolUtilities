@@ -1,9 +1,10 @@
 using LeagueUtilities.DTO;
 namespace LeagueUtilities;
 
-internal partial class PickBan
+internal class PickBan
 {
-    LeagueClientApi api;
+    private static PickBan _pickBan = null;
+    private LeagueClientApi api;
     private long SummonerId;
     private const int BAN_ACTION = 0;
     private const int BANS_REVEAL_ACTION = 1;
@@ -18,8 +19,9 @@ internal partial class PickBan
     private bool hasPicked;
     private bool HasToPickRandomSkin {get; set;}
     private bool hasPickSkin;
+    private bool finished;
 
-    public PickBan(LeagueClientApi api, long SummonerId, bool pick = false, bool skin = false){
+    private PickBan(LeagueClientApi api, long SummonerId, bool pick, bool skin){
         this.api = api;
         this.SummonerId = SummonerId;
 
@@ -38,11 +40,19 @@ internal partial class PickBan
 
         championId = 0;
         ActorCellID = -1;
+
+        finished = false;
     }
 
-    public async Task Start()
+    public static void New(LeagueClientApi api, long SummonerId, bool pick = false, bool skin = false)
     {
-        string response = await api
+        Finish();
+        _pickBan = new PickBan(api, SummonerId, pick, skin);
+    }
+
+    public static async Task Start()
+    {
+        var response = await _pickBan.api
             .RequestHandler
             .GetJsonResponseAsync(
                 HttpMethod.Get,
@@ -56,68 +66,71 @@ internal partial class PickBan
                 PropertyNameCaseInsensitive = true
             }
         );
-        ActorCellID = data!.localPlayerCellId;
+        _pickBan.ActorCellID = data!.localPlayerCellId;
 
-        api.EventHandler.Subscribe("/lol-champ-select/v1/session", OnSessionEvent);
+        _pickBan.api.EventHandler.Subscribe("/lol-champ-select/v1/session", OnSessionEvent);
         
-        await PicknBan(data);
+        await _pickBan.PicknBan(data);
     }
 
-    public void Finish()
+    public static void Finish()
     {
-        api.EventHandler.Unsubscribe("/lol-champ-select/v1/session");
+        if (_pickBan is null || _pickBan.finished) return;
+        
+        _pickBan.finished = true;
+        _pickBan.api.EventHandler.Unsubscribe("/lol-champ-select/v1/session");
     }
-    
-    public async void OnSessionEvent(object? sender, LeagueEvent e){
+
+    private static async void OnSessionEvent(object? sender, LeagueEvent e){
 
         var sessionData = e.Data.ToObject<SessionsJSON>();
         if (sessionData is null) return;
         
-        await PicknBan(sessionData);
+        await _pickBan.PicknBan(sessionData);
         
     }
 
     private async Task PicknBan(SessionsJSON sessionData)
     {
-        if(sessionData.timer.phase == "PLANNING")
+        switch (sessionData.timer.phase)
         {
-            if(HasToPicknBan && !hasPrepicked){
-                hasPrepicked = true;
-                await prePick(sessionData, ActorCellID);
-                return;
+            case "PLANNING":
+            {
+                if(HasToPicknBan && !hasPrepicked){
+                    hasPrepicked = true;
+                    await prePick(sessionData, ActorCellID);
+                }
+                break;
             }
-        }
-        else if (sessionData.timer.phase == "BAN_PICK")
-        {
-            if(HasToPicknBan && !hasBanned){
+            case "BAN_PICK" when HasToPicknBan && !hasBanned:
                 hasBanned = true;
                 await ban(sessionData);
                 return;
-            }
-            
-            if(HasToPicknBan && !hasPicked && sessionData.actions[BANS_REVEAL_ACTION][0].completed){
+            case "BAN_PICK" when HasToPicknBan && !hasPicked && sessionData.actions[BANS_REVEAL_ACTION][0].completed:
                 System.Console.WriteLine("PARA PICKEAR");
                 hasPicked = true;
                 await pick(sessionData);
                 return;
-            }
-        }
-        else{
-            if(HasToPickRandomSkin && !hasPickSkin){
-                hasPickSkin = true;
-                await skinPick();
-                return;
+            case "BAN_PICK":
+                break;
+            default:
+            {
+                if(HasToPickRandomSkin && !hasPickSkin){
+                    hasPickSkin = true;
+                    await skinPick();
+                }
+                break;
             }
         }
     } 
 
-    public void SetPicks(List<int> bans, List<int> picks){
-        champsToBanId = bans;
-        champsToPickId = picks;
+    public static void SetPicks(List<int> bans, List<int> picks){
+        _pickBan.champsToBanId = bans;
+        _pickBan.champsToPickId = picks;
     }
 
 
-    public async Task prePick(SessionsJSON sessionData, int actorCellId){
+    private async Task prePick(SessionsJSON sessionData, int actorCellId){
 
     if(champsToPickId.Count == 0) return;
 
@@ -142,7 +155,8 @@ internal partial class PickBan
         
     return;
     }
-    public async Task ban(SessionsJSON sessionData)
+
+    private async Task ban(SessionsJSON sessionData)
     {
         if(champsToBanId.Count == 0) return;
 
@@ -185,7 +199,7 @@ internal partial class PickBan
         
     }
 
-    public async Task pick(SessionsJSON sessionData)
+    private async Task pick(SessionsJSON sessionData)
     {
         if(champsToPickId.Count == 0) return;
 
@@ -226,7 +240,7 @@ internal partial class PickBan
         
     }
 
-    public async Task skinPick(){
+    private async Task skinPick(){
 
         System.Console.WriteLine("pickear skin");
         Log.Information("Pick Skin");
@@ -268,11 +282,4 @@ internal partial class PickBan
                         );
 
     }
-
-
-
-
-
-
-
 }

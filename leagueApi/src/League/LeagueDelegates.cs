@@ -25,7 +25,7 @@ public partial class League{
         {
             case "Lobby":
             {
-                pickBan?.Finish();
+                PickBan.Finish();
 
                 break;
             }
@@ -41,18 +41,19 @@ public partial class League{
             }
             case "MatchMaking":
             {
-                pickBan?.Finish();
+                PickBan.Finish();
                 break;
             }
             case "ChampSelect":
             {   
-                pickBan = new(api, SummonerId, true, true);
-                pickBan.SetPicks(champsToBanId,champsToPickId);
+                PickBan.New(api, SummonerId, true, true);
+                PickBan.SetPicks(champsToBanId,champsToPickId);
+                await PickBan.Start();
                 break;
             }
             case "InProgress":
             {
-                pickBan?.Finish();
+                PickBan.Finish();
                 break;
             }
             

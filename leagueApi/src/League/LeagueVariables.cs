@@ -14,7 +14,6 @@ public partial class League{
     
     private readonly Dictionary<string, EventHandler<LeagueEvent>> _events;
     private LeagueClientApi? api;
-    private PickBan? pickBan;
     private long SummonerId;
     private List<int> champsToPickId;
     private List<int> champsToBanId;

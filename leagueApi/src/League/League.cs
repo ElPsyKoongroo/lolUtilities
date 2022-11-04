@@ -16,8 +16,6 @@ public partial class League
         _events = new();
         SummonerId = 0;
 
-        pickBan = null;
-
         champsToBanId = new();
         champsToPickId = new();
         skinId = 0;
