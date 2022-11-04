@@ -1,7 +1,3 @@
-using Serilog;
-using LCUSharp.Websocket;
-using LeagueUtilities.DTO;
-
 namespace LeagueUtilities;
 
 public partial class League{
