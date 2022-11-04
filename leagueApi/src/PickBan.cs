@@ -3,7 +3,7 @@ namespace LeagueUtilities;
 
 internal class PickBan
 {
-    private static PickBan _pickBan = null;
+    private static PickBan? _pickBan = null;
     private LeagueClientApi api;
     private long SummonerId;
     private const int BAN_ACTION = 0;
