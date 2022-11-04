@@ -1,10 +1,3 @@
-using Serilog;
-using LCUSharp;
-
-
-using LeagueUtilities.DTO;
-using Serilog.Events;
-
 namespace LeagueUtilities;
 
 public partial class League
@@ -66,7 +59,7 @@ public partial class League
     }
     public void disconnect(){
         if(api is null) return;
-        api.Disconnected -= OnDisconnected!;
+        api.Disconnected -= OnDisconnected;
         api.Disconnect();
     }
 }
