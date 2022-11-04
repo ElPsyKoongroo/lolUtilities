@@ -85,9 +85,9 @@ namespace LeagueUtilities.DTO
         public int championPickIntent { get; set; }
         public string entitledFeatureType { get; set; }
         public long selectedSkinId { get; set; }
-        public UInt64 spell1Id { get; set; }
-        public UInt64 spell2Id { get; set; }
-        public UInt64 summonerId { get; set; }
+        public ulong spell1Id { get; set; }
+        public ulong spell2Id { get; set; }
+        public ulong summonerId { get; set; }
         public int team { get; set; }
         public int wardSkinId { get; set; }
     }
