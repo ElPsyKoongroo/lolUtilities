@@ -40,12 +40,12 @@ public partial class League
         api.Disconnected += OnDisconnected;
     }
 
-    public void eventSuscribe(string uri, string leagueEvent){
+    public void eventSubscribe(string uri, string leagueEvent){
         if(api is null) return;
         api.EventHandler.Subscribe(uri, _events[leagueEvent]);
     }
     // if needed can create a bool array to say if event is setup or not;
-    public void eventDesuscribe(string uri){
+    public void eventDesubscribe(string uri){
         if(api is null) return;
         api.EventHandler.Unsubscribe(uri);
     }
@@ -61,7 +61,7 @@ public partial class League
         await getSummoner();
 
         //Not here
-        eventSuscribe("/lol-gameflow/v1/gameflow-phase","gameflowEvent");
+        eventSubscribe("/lol-gameflow/v1/gameflow-phase","gameflowEvent");
         //eventSuscribe("/lol-champ-select/v1/session","sessionEvent");
     }
     public void disconnect(){
