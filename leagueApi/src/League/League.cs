@@ -6,11 +6,11 @@ public partial class League
     public League()
     {
         CreateLogger();
-        _events = new();
+        _events = new Dictionary<string, EventHandler<LeagueEvent>>();
         SummonerId = 0;
 
-        champsToBanId = new();
-        champsToPickId = new();
+        champsToBanId = new List<int>();
+        champsToPickId = new List<int>();
         skinId = 0;
 
 
@@ -24,8 +24,8 @@ public partial class League
     public void addPick(params int[] championsId){
         Array.ForEach(championsId, x=> champsToPickId.Add(x));
     }
-    
-    public void setEvents(){
+
+    private void setEvents(){
         if(api is null) return;
         
         _events.Add("gameflowEvent", OnGameflowEvent);
@@ -33,14 +33,12 @@ public partial class League
         api.Disconnected += OnDisconnected;
     }
 
-    public void eventSubscribe(string uri, string leagueEvent){
-        if(api is null) return;
-        api.EventHandler.Subscribe(uri, _events[leagueEvent]);
+    private void eventSubscribe(string uri, string leagueEvent){
+        api?.EventHandler.Subscribe(uri, _events[leagueEvent]);
     }
     // if needed can create a bool array to say if event is setup or not;
     public void eventDesubscribe(string uri){
-        if(api is null) return;
-        api.EventHandler.Unsubscribe(uri);
+        api?.EventHandler.Unsubscribe(uri);
     }
     public async Task connect()
     {
