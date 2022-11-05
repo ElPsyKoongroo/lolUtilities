@@ -37,4 +37,15 @@ public partial class League
         
         Log.Information(response);
     }
+
+    public async Task acceptGame(){
+        if( api is null ) return;
+        await Task.Delay(getTimeSpanBetween(1,2));
+        var json = await api
+                .RequestHandler
+                .GetJsonResponseAsync(HttpMethod.Post,
+                "/lol-matchmaking/v1/ready-check/accept",
+                Enumerable.Empty<string>());
+
+    }
 }

@@ -27,12 +27,7 @@ public partial class League{
             }
             case "ReadyCheck":
             {
-                await Task.Delay(getTimeSpanBetween(1,2));
-                await api
-                    .RequestHandler
-                    .GetJsonResponseAsync(HttpMethod.Post,
-                        "/lol-matchmaking/v1/ready-check/accept",
-                        Enumerable.Empty<string>());
+                await acceptGame();
                 break;
             }
             case "MatchMaking":

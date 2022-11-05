@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:lolClientUtilities.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="800" Width="1200"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         UseLayoutRounding="True"
@@ -24,11 +24,12 @@
             ClipToBounds="True"
             BorderBrush="#c1af8c"
             >
-        
+
         <Border.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="#051825" Offset="0.0" />
-                <GradientStop Color="#1b3a47" Offset="1.0" />
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0.8,0.9">
+                <GradientStop Color="{StaticResource Color1}" Offset="0.0" />
+                <GradientStop Color="{StaticResource Color2}" Offset="1.0" />
+                <!-- <GradientStop Color="#6040CF" Offset="0.8" />#AD00FF  #C344FB  #7000AD-->
             </LinearGradientBrush>
         </Border.Background>
         
@@ -42,8 +43,8 @@
                        MouseDown="MoverVentana"
                        Name="BorderMove"/>
             
-            <Line Stroke="#1c3c4b" StrokeThickness="1"
-                  X1="0" X2="800"
+            <Line Stroke="#4800A8" StrokeThickness="1"
+                  X1="0" X2="1200"
                   Y1="1" Y2="1"/>
             
             <Grid DataContext="{StaticResource ViewModel}"

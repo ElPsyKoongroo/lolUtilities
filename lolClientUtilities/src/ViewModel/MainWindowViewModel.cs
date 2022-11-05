@@ -19,7 +19,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private string text = "a";
+    private string text = "b";
     
     public event PropertyChangedEventHandler? PropertyChanged;
  

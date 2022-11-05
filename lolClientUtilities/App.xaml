@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:lolClientUtilities"
              StartupUri="/src/View/MainWindow.xaml">
     <Application.Resources>
-         
+         <ResourceDictionary Source="src/Styles/colors.xaml"/>
     </Application.Resources>
 </Application>

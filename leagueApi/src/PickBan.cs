@@ -154,7 +154,6 @@ internal class PickBan
         
     return;
     }
-
     private async Task ban(SessionsJSON sessionData)
     {
         if(champsToBanId.Count == 0) return;
@@ -204,7 +203,6 @@ internal class PickBan
         }
         
     }
-
     private async Task pick(SessionsJSON sessionData)
     {
         var total = champsToPickId.Count;
@@ -212,6 +210,7 @@ internal class PickBan
         if (total == 0)
         {
             Log.Information("No se puede pickear nada");
+            return;
         }
 
         List<int> prePicks = new();
@@ -266,7 +265,6 @@ internal class PickBan
 
         
     }
-
     private async Task skinPick()
     {
         Log.Information("Pick Skin");
