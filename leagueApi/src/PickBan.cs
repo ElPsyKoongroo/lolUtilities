@@ -136,8 +136,7 @@ internal class PickBan
 
     ActorCellID = actorCellId;
 
-    DTO.Action? prePickAction;
-    prePickAction = sessionData.actions[PICK_ACTION]
+    var prePickAction = sessionData.actions[PICK_ACTION]
         .FirstOrDefault( x => x!.actorCellId == ActorCellID, null);
 
     if( prePickAction is null ) return;        
@@ -166,8 +165,7 @@ internal class PickBan
         Array.ForEach(sessionData.myTeam, myteam => prePicks.Add(myteam.championPickIntent));
         Array.ForEach(sessionData.bans.myTeamBans, teamBans => bannedAlready.Add(teamBans));
 
-        DTO.Action? banAction;
-        banAction = sessionData.actions[BAN_ACTION]
+        var banAction = sessionData.actions[BAN_ACTION]
             .FirstOrDefault(
                 x => x!.actorCellId == ActorCellID && x.isInProgress,
                 null);
@@ -183,53 +181,82 @@ internal class PickBan
 
             await Task.Delay(League.getTimeSpanBetween(2,3)); // Podria haber un evento de que ya se haya baneado antes de que se acaben los 2s y no se pueda banear.
 
-            var response = await api
-                .RequestHandler
-                .GetJsonResponseAsync(HttpMethod.Patch,
-                $"/lol-champ-select/v1/session/actions/{banAction.id}", 
-                Enumerable.Empty<string>(), body);
-            
-
+            Log.Information("Baneando a {@ID}", id);
+            try
+            {
+                await api
+                    .RequestHandler
+                    .GetJsonResponseAsync(HttpMethod.Patch,
+                        $"/lol-champ-select/v1/session/actions/{banAction.id}",
+                        Enumerable.Empty<string>(), body);
+                Log.Information("{@ID} baneado", id);
+            }
+            catch(Exception e)
+            {
+                Log.Information(e, "No se ha podido banear a {@ID}", id);
+                ///     TODO -> Hacer que cuando no pueda banear compruebe si es porque
+                ///      ese campeon ya lo ha baneado otra persona o porque ya se ha
+                ///     baneado otro campeon
+            }
             prePicks.Clear();
             bannedAlready.Clear();
-
             return;
-            
         }
         
     }
 
     private async Task pick(SessionsJSON sessionData)
     {
-        if(champsToPickId.Count == 0) return;
+        var total = champsToPickId.Count;
+        Log.Information("Champ to pick {@Count}", total);
+        if (total == 0)
+        {
+            Log.Information("No se puede pickear nada");
+        }
 
         List<int> prePicks = new();
         List<int> bannedAlready = new();     
         
-        Array.ForEach( sessionData.myTeam.Where(summoner => summoner.cellId != ActorCellID).ToArray(), myteam => prePicks.Add(myteam.championPickIntent) );
+        //Array.ForEach( sessionData.myTeam.Where(summoner => summoner.cellId != ActorCellID).ToArray(), myteam => prePicks.Add(myteam.championPickIntent) );
         Array.ForEach( sessionData.bans.myTeamBans.Concat(sessionData.bans.theirTeamBans).ToArray() , teamBans => bannedAlready.Add(teamBans) );
 
-        DTO.Action? pickAction = sessionData.actions[PICK_ACTION]
+        Log.Debug("Getting pick action");
+        var pickAction = sessionData.actions[PICK_ACTION]
             .FirstOrDefault( x => x!.actorCellId == ActorCellID, null );
-
         if(pickAction is null) return;
+        Log.Debug("Pick action ID: {@ID}", pickAction.id);
 
-        foreach(var id in champsToPickId){
+        foreach(var id in champsToPickId)
+        {
+            Log.Information("Intentando pickear a {@Champ}", id);
 
-            if(prePicks.Contains(id) || bannedAlready.Contains(id)) continue;
+            if (bannedAlready.Contains(id))
+            {
+                Log.Information("Already banned");
+                continue;
+            }
 
             var body = new { championId = id , completed = true};
 
-            championId = id;
 
             await Task.Delay(League.getTimeSpanBetween(3,4)); // Podria haber un evento de que ya se haya baneado antes de que se acaben los 2s y no se pueda banear.
-
-            var response = await api
-                .RequestHandler
-                .GetJsonResponseAsync(HttpMethod.Patch,
-                $"/lol-champ-select/v1/session/actions/{pickAction.id}", 
-                Enumerable.Empty<string>(), body);
+            Log.Information("Pickeando a {@Champ}", id);
+            try
+            {
+                await api
+                    .RequestHandler
+                    .GetJsonResponseAsync(HttpMethod.Patch,
+                        $"/lol-champ-select/v1/session/actions/{pickAction.id}",
+                        Enumerable.Empty<string>(), body);
+                Log.Information("{@Champ} pickeado", id);
+            }
+            catch (Exception e)
+            {
+                Log.Information(e, "No se ha podido pickear a {@Champ}", id);
+                continue;
+            }
             
+            championId = id;
 
             prePicks.Clear();
             bannedAlready.Clear();
@@ -240,19 +267,18 @@ internal class PickBan
         
     }
 
-    private async Task skinPick(){
-
-        System.Console.WriteLine("pickear skin");
+    private async Task skinPick()
+    {
         Log.Information("Pick Skin");
 
-        Log.Information("Asking for skins");        
-        string response = await api.RequestHandler
+        Log.Debug("Asking for skins");        
+        var response = await api.RequestHandler
                             .GetJsonResponseAsync(HttpMethod.Get,
                             $"lol-champions/v1/inventories/{SummonerId}/champions/{championId}/skins");
         
         if (response is null) return;
         
-        var skinData = System.Text.Json.JsonSerializer.Deserialize<List<SkinJSON>>(response, 
+        var skinData = JsonSerializer.Deserialize<List<SkinJSON>>(response, 
             new JsonSerializerOptions()
             {
                 IncludeFields = true,
@@ -262,24 +288,26 @@ internal class PickBan
 
         if(skinData is null) return;
         
-        List<int> ownedSkins = skinData
+        var ownedSkins = skinData
             .Where(skin => skin.ownership.owned 
                 && !skin.isBase
                 && !skin.lastSelected)
             .Select(x=> x.id).ToList();
-
+        
+        Log.Debug("Total skins: {@NSkins}");
+        
         if(ownedSkins.Count == 0) return;
 
         var body = new { selectedSkinId =  ownedSkins[Random.Shared.Next(0,ownedSkins.Count)] };
 
         await Task.Delay(League.getTimeSpanBetween(2,3));
-        Log.Information("Picking Skin ",body.selectedSkinId);
+        Log.Information("Picking Skin {@Skin}",body.selectedSkinId);
         
-        var res = await api.RequestHandler
-                        .GetJsonResponseAsync(HttpMethod.Patch,
-                        "/lol-champ-select/v1/session/my-selection/",
-                        Enumerable.Empty<string>(), body
-                        );
-
+        await api.RequestHandler
+            .GetJsonResponseAsync(HttpMethod.Patch,
+                "/lol-champ-select/v1/session/my-selection/",
+                Enumerable.Empty<string>(), body
+            );
+        Log.Information("Skin {@Skin} picked",body.selectedSkinId);
     }
 }

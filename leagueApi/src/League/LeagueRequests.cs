@@ -1,5 +1,3 @@
-using System.Text.Json;
-using Serilog;
 using LeagueUtilities.DTO;
 namespace LeagueUtilities;
 
@@ -8,7 +6,7 @@ public partial class League
     private async Task getSummoner(){
         if(api is null ) return;
 
-        string response = await api.RequestHandler
+        var response = await api.RequestHandler
             .GetJsonResponseAsync(HttpMethod.Get,
                 "lol-summoner/v1/current-summoner");
         
@@ -32,18 +30,11 @@ public partial class League
     public async Task getSelectChampion(){
         if( api is null ) return;
 
-        string response = await api.RequestHandler
+        var response = await api.RequestHandler
             .GetJsonResponseAsync(HttpMethod.Get,
                 "lol-champ-select/v1/current-champion");
         
         
         Log.Information(response);
-        
-
-
-
     }
-
-    
-
 }

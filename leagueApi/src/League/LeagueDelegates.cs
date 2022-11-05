@@ -15,7 +15,7 @@ public partial class League{
     {
         if(api is null) return;
 
-        string msg = e.Data.ToString();
+        var msg = e.Data.ToString();
 
         switch(msg)
         {
@@ -28,9 +28,9 @@ public partial class League{
             case "ReadyCheck":
             {
                 await Task.Delay(getTimeSpanBetween(1,2));
-                var json = await api
-                        .RequestHandler
-                        .GetJsonResponseAsync(HttpMethod.Post,
+                await api
+                    .RequestHandler
+                    .GetJsonResponseAsync(HttpMethod.Post,
                         "/lol-matchmaking/v1/ready-check/accept",
                         Enumerable.Empty<string>());
                 break;
