@@ -31,5 +31,12 @@ public partial class MainWindow : Window
     {
         Application.Current.Shutdown();
     }
+    private void MinimizeButton_OnClick(object sender, RoutedEventArgs e){
+        Application.Current.MainWindow.WindowState = WindowState.Minimized;
+    }
+
+    private void onPicknBanSettings(object sender, RoutedEventArgs e){
+        
+    }
 }
 

@@ -9,10 +9,11 @@
     <Company>ElPsyKoongroo</Company>
     <WarningLevel>0</WarningLevel>
     <NeutralLanguage>es-ES</NeutralLanguage>
+    <ApplicationIcon>resources\icons\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="src\Model" />
+    <Folder Include="src\Model"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -33,10 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="resources\icons\x.png" />
-    <Resource Include="resources\icons\x.png">
+    <None Remove="resources\icons\AppIcon.png" />
+    <Resource Include="resources\icons\AppIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+
+
 
 </Project>

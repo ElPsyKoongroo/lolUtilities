@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Navigation;
 using LeagueUtilities;
 
 namespace lolClientUtilities.ViewModel;
@@ -9,6 +13,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
 {
     private League _client = new();
 
+    private string text = "";
     public string Text
     {
         get => text;
@@ -19,7 +24,37 @@ public class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private string text = "b";
+    private bool autoAccept = false;
+    public bool AutoAccept
+    {
+        get => autoAccept;
+        set
+        {
+            autoAccept = value;
+            OnPropertyChange();
+        }
+    }
+
+    private bool picknBan = false;
+    public bool PicknBan
+    {
+        get => picknBan;
+        set
+        {
+            picknBan = value;
+            OnPropertyChange();
+        }
+    }
+    private Page ActualPage;
+    public bool actualPage
+    {
+        get => actualPage;
+        set
+        {
+            actualPage = value;
+            OnPropertyChange();
+        }
+    }
     
     public event PropertyChangedEventHandler? PropertyChanged;
  
@@ -27,5 +62,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+
+   
 
 }
