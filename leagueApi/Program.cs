@@ -12,24 +12,9 @@ public static class Program
         //await A();
         await Prueba2();
     }
+    
 
-    private static async Task A()
-    {
-        Champs champs = new();
-
-        champs.bans = new List<int>{1,2,3};
-        champs.picks = new List<int>{1,2,4};
-
-        var data = JsonSerializer.Serialize(champs, new JsonSerializerOptions{IncludeFields = true});
-        
-        var actualPath = Environment.CurrentDirectory;
-
-        var _champs = Path.Combine(actualPath, "campeones.txt");
-        
-        await File.WriteAllTextAsync(_champs, data);
-    }
-
-    private static async Task Prueba1()
+    /*private static async Task Prueba1()
     {
         League n = new();
         n.addBans( 35,105,11,45);
@@ -45,7 +30,7 @@ public static class Program
 
         n.disconnect();
 
-    }
+    }*/
     
     private static async Task Prueba2()
     {
@@ -64,10 +49,10 @@ public static class Program
 
         var info = await File.ReadAllTextAsync(champs);
 
-        Champs champsData;
+        ChampsAux champsData;
         try
         {
-            champsData = JsonSerializer.Deserialize<Champs>(info, new JsonSerializerOptions { IncludeFields = true });
+            champsData = JsonSerializer.Deserialize<ChampsAux>(info, new JsonSerializerOptions { IncludeFields = true })!;
         }
         catch (Exception e)
         {
@@ -125,7 +110,7 @@ public static class Program
         await File.WriteAllTextAsync(@"C:\Users\Adrian\Desktop\lolChampsMinimal.txt", x);
     }*/
 }
-public class Champs
+public class ChampsAux
 {
     public List<int> bans { get; set; }
     public List<int> picks { get; set; }

@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="src\Model"/>
+    <Folder Include="src\Model" />
   </ItemGroup>
 
   <ItemGroup>

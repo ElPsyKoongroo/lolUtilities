@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using LeagueUtilities;
+using lolClientUtilities.View;
 
 namespace lolClientUtilities.ViewModel;
 
@@ -45,8 +46,8 @@ public class MainWindowViewModel : INotifyPropertyChanged
             OnPropertyChange();
         }
     }
-    private Page ActualPage;
-    public bool actualPage
+    private Page actualPage;
+    public Page ActualPage
     {
         get => actualPage;
         set
@@ -63,6 +64,9 @@ public class MainWindowViewModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-   
+    public MainWindowViewModel()
+    {
+        ActualPage = new PicknBan();
+    }
 
 }
