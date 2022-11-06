@@ -12,7 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DLLs\" />
     <Folder Include="src\Model" />
   </ItemGroup>
 
@@ -31,6 +30,13 @@
       <XamlRuntime>Wpf</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="resources\icons\x.png" />
+    <Resource Include="resources\icons\x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

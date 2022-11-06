@@ -18,11 +18,11 @@
         <vm:MainWindowViewModel x:Key="ViewModel"/>
     </Window.Resources>
 
-    <Border BorderThickness="1" 
+    <Border BorderThickness="5" 
             CornerRadius="10"
             UseLayoutRounding="True"
             ClipToBounds="True"
-            BorderBrush="#c1af8c"
+            BorderBrush="{StaticResource B_Dorado}"
             >
 
         <Border.Background>
@@ -40,18 +40,38 @@
                        CornerRadius="10, 10, 0, 0"
                        BorderThickness="0"
                        ClipToBounds="True"
-                       MouseDown="MoverVentana"
-                       Name="BorderMove"/>
+                       MouseDown="MoverVentana">
+                
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            UseLayoutRounding="True"
+                            ClipToBounds="True">
+                    
+                    <Button Style="{StaticResource TopBarButton}"
+                            Click="CloseButton_OnClick"
+                            >
+                        
+                        <Image Source="../../resources/icons/x.png" 
+                               Stretch="Uniform"
+                        >
+                          
+                        </Image>    
+                    
+                            
+                    </Button>
+                    
+                </StackPanel>
+                
+            </Border>
             
-            <Line Stroke="#4800A8" StrokeThickness="1"
-                  X1="0" X2="1200"
-                  Y1="1" Y2="1"/>
+                <Line Stroke="{StaticResource B_Dorado}" StrokeThickness="3"
+                      X1="0" X2="{Binding ElementName=Window, Path=Width}"
+                      Y1="1" Y2="1"/>
             
             <Grid DataContext="{StaticResource ViewModel}"
                   ClipToBounds="True"
                   Background="Transparent"
-                  IsHitTestVisible="True"
-                  >
+                  IsHitTestVisible="True">
                 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20"/>

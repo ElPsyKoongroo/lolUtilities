@@ -27,5 +27,9 @@ public partial class MainWindow : Window
             DragMove();
     }
 
+    private void CloseButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Shutdown();
+    }
 }
 

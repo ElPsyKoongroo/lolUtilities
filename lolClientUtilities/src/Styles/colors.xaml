@@ -12,9 +12,12 @@
     <Style TargetType="Border" x:Key="Fondo">
         <Setter Property="BorderThickness" Value="10"/>
     </Style>
-
+    <!--- #6D00A8-->
     <Color x:Key="Color1">#6D00A8</Color>
+    <Brush x:Key="Brush1">#6D00A8</Brush>
     <Color x:Key="Color2">#51007D</Color>
-    <Color x:Key="Color3">#ffffff</Color>
+    <Brush x:Key="Brush2">#51007D</Brush>
+    <Color x:Key="C_Dorado">#c1af8c</Color>
+    <Brush x:Key="B_Dorado">#c1af8c</Brush>
     <Color x:Key="Color4">#ffffff</Color>
 </ResourceDictionary>
