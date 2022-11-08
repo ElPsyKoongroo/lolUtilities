@@ -2,8 +2,8 @@ namespace LeagueUtilities;
 
 public partial class League
 {
-    
-    public League()
+    private static League? _league;
+    private League()
     {
         CreateLogger();
         _events = new Dictionary<string, EventHandler<LeagueEvent>>();
@@ -12,8 +12,11 @@ public partial class League
         champsToBanId = new List<int>();
         champsToPickId = new List<int>();
         skinId = 0;
+    }
 
-
+    public static League GetLeague()
+    {
+        return _league ??= new League();
     }
 
     public void addBans(params int[] championsId){

@@ -48,4 +48,13 @@ public partial class League
                 Enumerable.Empty<string>());
 
     }
+    
+    public async Task<List<ChampsJSON>> getAllChamps(){
+        if( api is null ) return new List<ChampsJSON>();
+
+        return await api.RequestHandler
+            .GetResponseAsync<List<ChampsJSON>>(HttpMethod.Get,
+                $"lol-champions/v1/inventories/{SummonerId}/champions");
+        
+    }
 }

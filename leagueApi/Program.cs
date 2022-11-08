@@ -76,7 +76,7 @@ public static class Program
             Console.WriteLine(champ);
         }
 
-        League n = new();
+        League n = League.GetLeague();
         Console.WriteLine("Conectando");
         await n.connect();
         Console.WriteLine("Conectado");

@@ -12,7 +12,7 @@ namespace lolClientUtilities.ViewModel;
 
 public class MainWindowViewModel : INotifyPropertyChanged
 {
-    private League _client = new();
+    //private League _client = League.GetLeague();
 
     private string text = "";
     public string Text
@@ -46,8 +46,8 @@ public class MainWindowViewModel : INotifyPropertyChanged
             OnPropertyChange();
         }
     }
-    private Page actualPage;
-    public Page ActualPage
+    private UserControl actualPage;
+    public UserControl ActualPage
     {
         get => actualPage;
         set
