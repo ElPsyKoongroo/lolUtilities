@@ -27,9 +27,10 @@
         </Grid.RowDefinitions>
 
         <TextBox Grid.Column="0" Grid.Row="0" 
-                 Text="{Binding Filter, Mode=TwoWay}"/>
+                 Text="{Binding Filter,
+                 UpdateSourceTrigger=PropertyChanged}"/>
         
-        <ListView Grid.Column="0" Grid.Row="1" 
+        <ListView Grid.Column="0" Grid.Row="1"
                   ItemsSource="{Binding Champs}"
                   Background="Transparent"
                   Width="300"
@@ -43,8 +44,6 @@
                             HorizontalAlignment="Center"
                             Background="Gray">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Text="{Binding id}" FontSize="20"/>
-                            <TextBlock Text="->" FontSize="20"/>
                             <TextBlock Text="{Binding name}" FontSize="20"/>
                             
                         </StackPanel>

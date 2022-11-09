@@ -14,20 +14,21 @@ namespace lolClientUtilities.ViewModel;
 
 public class PicknBanViewModel : INotifyPropertyChanged
 {
-    private League league = League.GetLeague();
+    private readonly League league = League.GetLeague();
     private List<ChampsJSON> allChamps;
 
     private List<ChampsJSON> champs;
     public List<ChampsJSON> Champs
     {
         get => champs;
-        set
+        private set
         {
             champs = value;
             OnPropertyChange();
         }
     }
-    private string filter;
+    private string filter = "";
+
     public string Filter
     {
         get => filter;
@@ -36,25 +37,26 @@ public class PicknBanViewModel : INotifyPropertyChanged
             filter = value;
             OnPropertyChange();
             //Debug.WriteLine(filter);
-            //Champs = FilterChamps();
+            Champs = FilterChamps();
         }
     }
     
 
     private List<ChampsJSON> FilterChamps()
     {
-        return filter == "" ? allChamps : allChamps.Where(champ => champ.name.Contains(filter) || champ.alias.Contains(filter)).ToList();
+        if (filter == "") return allChamps;
+        var aux = filter.ToLower();
+
+        var champsAux = allChamps.Where(champ => champ.name.ToLower().StartsWith(filter));
+        champsAux = champsAux.Concat(allChamps.Where(champ =>
+            !champ.name.ToLower().StartsWith(filter) && champ.name.ToLower().Contains(filter)));
+
+        return champsAux.ToList();
     }
 
     private async Task<List<ChampsJSON>> GetChamps()
     {
         return await league.getAllChamps();
-        /*return new List<ChampsJSON>()
-        {
-            new ChampsJSON() { alias = "Adrian", id = 1, name = "Adrian" },
-            new ChampsJSON() { alias = "Adrian", id = 1, name = "Eddie" },
-            new ChampsJSON() { alias = "Adrian", id = 1, name = "Sergio" },
-        };*/
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -71,13 +73,11 @@ public class PicknBanViewModel : INotifyPropertyChanged
 
     private async Task connect()
     {
-        
         await league.connect();
 
         allChamps = await GetChamps();
         allChamps.RemoveAt(0);
+        allChamps = allChamps.OrderBy(x => x.name).ToList();
         Champs = allChamps;
-        
-        champs.Clear();
     }
 }
