@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using CommunityToolkit.Mvvm.Input;
@@ -23,8 +25,8 @@ public class PicknBanViewModel : INotifyPropertyChanged
     private List<ChampsJSON> champsToBan;
     private List<ChampsJSON> champsToPick;
     private List<ChampsJSON> champs;
-    public RelayCommand addPick;
-    
+    public ICommand addPick { get; set; }
+
     public List<ChampsJSON> Champs
     {
         get => champs;
@@ -106,11 +108,14 @@ public class PicknBanViewModel : INotifyPropertyChanged
 
     public PicknBanViewModel()
     {
-        addPick = new RelayCommand(() =>
-        {
-            
-        });
+        //MouseButtonEventArgs
+        addPick = new RelayCommand<object>(Clicked);
         connect();
+    }
+
+    private void Clicked(object vista)
+    {
+        Debug.WriteLine(vista.GetType().FullName);
     }
 
     private async Task connect()

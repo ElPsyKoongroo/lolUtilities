@@ -3,12 +3,16 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:vm="clr-namespace:lolClientUtilities.ViewModel"
+      
       xmlns:local="clr-namespace:lolClientUtilities.View"
       mc:Ignorable="d">
     <UserControl.Resources>
         <vm:PicknBanViewModel x:Key="ViewModel"/>
     </UserControl.Resources>
+    
+    
 
     <Grid DataContext="{StaticResource ViewModel}"
           ClipToBounds="True"
@@ -30,17 +34,26 @@
                  Text="{Binding Filter,
                  UpdateSourceTrigger=PropertyChanged}"/>
         
+        
+        
         <ListView Grid.Column="0" Grid.Row="1"
                   ItemsSource="{Binding Champs}"
                   Background="Transparent"
                   Width="300"
                   HorizontalAlignment="Center"
-                  HorizontalContentAlignment="Center">
+                  HorizontalContentAlignment="Center"
+                  Name="listaChamps">
+            
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction 
+                        Command="{Binding addPick}" CommandParameter="{Binding ElementName=listaChamps, Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding RelativeSource={
-                                RelativeSource AncestorType=Window,Mode= FindAncestor},Path=DataContext.addPick }">
+                    <Button>
                         <Border BorderBrush="Black" Margin="3" BorderThickness="4"
                                 CornerRadius="3" Width="200"
                                 HorizontalAlignment="Center"
@@ -61,7 +74,7 @@
                   Width="300"
                   HorizontalAlignment="Center"
                   HorizontalContentAlignment="Center">
-            
+        
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" Margin="3" BorderThickness="4"
@@ -70,12 +83,12 @@
                             Background="Gray">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <TextBlock Text="{Binding name}" FontSize="20"/>
-                            
+        
                         </StackPanel>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            
+        
         </ListView>
         
     </Grid>
