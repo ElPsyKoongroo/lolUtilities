@@ -39,6 +39,31 @@
             
             <ListView.ItemTemplate>
                 <DataTemplate>
+                    <Button Command="{Binding RelativeSource={
+                                RelativeSource AncestorType=Window,Mode= FindAncestor},Path=DataContext.addPick }">
+                        <Border BorderBrush="Black" Margin="3" BorderThickness="4"
+                                CornerRadius="3" Width="200"
+                                HorizontalAlignment="Center"
+                                Background="Gray">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding name}" FontSize="20"/>
+                            </StackPanel>
+                        </Border>
+                    </Button>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            
+        </ListView>
+        
+        <ListView Grid.Column="1" Grid.Row="1"
+                  ItemsSource="{Binding ChampsToPick}"
+                  Background="Transparent"
+                  Width="300"
+                  HorizontalAlignment="Center"
+                  HorizontalContentAlignment="Center">
+            
+            <ListView.ItemTemplate>
+                <DataTemplate>
                     <Border BorderBrush="Black" Margin="3" BorderThickness="4"
                             CornerRadius="3" Width="200"
                             HorizontalAlignment="Center"
@@ -52,6 +77,7 @@
             </ListView.ItemTemplate>
             
         </ListView>
+        
     </Grid>
 
 </UserControl>

@@ -5,19 +5,26 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
+using CommunityToolkit.Mvvm.Input;
 using LeagueAPI;
 using LeagueUtilities;
 using LeagueUtilities.DTO;
+
+
 
 namespace lolClientUtilities.ViewModel;
 
 public class PicknBanViewModel : INotifyPropertyChanged
 {
-    private readonly League league = League.GetLeague();
+    private readonly League league; //= League.GetLeague();
     private List<ChampsJSON> allChamps;
-
+    private List<ChampsJSON> champsToBan;
+    private List<ChampsJSON> champsToPick;
     private List<ChampsJSON> champs;
+    public RelayCommand addPick;
+    
     public List<ChampsJSON> Champs
     {
         get => champs;
@@ -27,6 +34,28 @@ public class PicknBanViewModel : INotifyPropertyChanged
             OnPropertyChange();
         }
     }
+    
+    public List<ChampsJSON> ChampsToBan
+    {
+        get => champsToBan;
+        private set
+        {
+            champsToBan = value;
+            OnPropertyChange();
+        }
+    }
+    public List<ChampsJSON> ChampsToPick
+    {
+        get => champsToPick;
+        private set
+        {
+            champsToPick = value;
+            OnPropertyChange();
+        }
+    }
+    
+    
+    
     private string filter = "";
 
     public string Filter
@@ -56,7 +85,16 @@ public class PicknBanViewModel : INotifyPropertyChanged
 
     private async Task<List<ChampsJSON>> GetChamps()
     {
-        return await league.getAllChamps();
+        // return await league.getAllChamps();
+        return await Task.Run(() =>
+        {
+            return new List<ChampsJSON>
+            {
+                new ChampsJSON() { alias = "Adrian", id = 1, name = "Adrian" },
+                new ChampsJSON() { alias = "Eddie", id = 2, name = "Eduard" },
+                new ChampsJSON() { alias = "Sergious", id = 3, name = "Sergio" }
+            };
+        });
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -68,15 +106,19 @@ public class PicknBanViewModel : INotifyPropertyChanged
 
     public PicknBanViewModel()
     {
+        addPick = new RelayCommand(() =>
+        {
+            
+        });
         connect();
     }
 
     private async Task connect()
     {
-        await league.connect();
+        //await league.connect();
 
         allChamps = await GetChamps();
-        allChamps.RemoveAt(0);
+        //allChamps.RemoveAt(0);
         allChamps = allChamps.OrderBy(x => x.name).ToList();
         Champs = allChamps;
     }
