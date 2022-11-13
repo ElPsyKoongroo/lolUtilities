@@ -12,6 +12,10 @@ public partial class League
         champsToBanId = new List<int>();
         champsToPickId = new List<int>();
         skinId = 0;
+        _phase = -1;
+        hasToPick = false;
+        hasToPickSkin = false;
+        hasToAutoAccept = false;
     }
 
     public static League GetLeague()
@@ -26,6 +30,12 @@ public partial class League
 
     public void addPick(params int[] championsId){
         Array.ForEach(championsId, x=> champsToPickId.Add(x));
+    }
+    
+    public void SetPicks(List<int> bans, List<int> picks)
+    {
+        champsToBanId = bans;
+        champsToPickId = picks;
     }
 
     private void setEvents(){

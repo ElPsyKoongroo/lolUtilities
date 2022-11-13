@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,49 +13,33 @@ namespace lolClientUtilities.ViewModel;
 
 public class MainWindowViewModel : INotifyPropertyChanged
 {
-    //private League _client = League.GetLeague();
+    private League _client = League.GetLeague();
 
     private string text = "";
     public string Text
     {
         get => text;
-        set
-        {
-            text = value;
-            OnPropertyChange();
-        }
+        set { text = value; OnPropertyChange(); }
     }
 
     private bool autoAccept = false;
     public bool AutoAccept
     {
         get => autoAccept;
-        set
-        {
-            autoAccept = value;
-            OnPropertyChange();
-        }
+        set { autoAccept = value; OnPropertyChange(); _client.hasToAutoAccept = value; }
     }
-
+    
     private bool picknBan = false;
     public bool PicknBan
-    {
+    { 
         get => picknBan;
-        set
-        {
-            picknBan = value;
-            OnPropertyChange();
-        }
+        set { picknBan = value; OnPropertyChange(); _client.hasToPick = value; }
     }
     private UserControl actualPage;
     public UserControl ActualPage
     {
         get => actualPage;
-        set
-        {
-            actualPage = value;
-            OnPropertyChange();
-        }
+        set { actualPage = value; OnPropertyChange(); }
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -68,5 +53,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     {
         ActualPage = new PicknBan();
     }
+
+
 
 }

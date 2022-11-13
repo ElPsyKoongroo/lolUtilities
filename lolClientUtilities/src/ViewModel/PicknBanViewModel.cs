@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
@@ -13,66 +14,33 @@ using CommunityToolkit.Mvvm.Input;
 using LeagueAPI;
 using LeagueUtilities;
 using LeagueUtilities.DTO;
-
+using lolClientUtilities.View;
 
 
 namespace lolClientUtilities.ViewModel;
 
-public class PicknBanViewModel : INotifyPropertyChanged
+public partial class PicknBanViewModel : INotifyPropertyChanged
 {
-    private readonly League league; //= League.GetLeague();
+    private readonly League league = League.GetLeague();
     private List<ChampsJSON> allChamps;
-    private List<ChampsJSON> champsToBan;
-    private List<ChampsJSON> champsToPick;
+    private ObservableCollection<ChampsJSON> champsToBan = new();
+    private ObservableCollection<ChampsJSON> champsToPick = new();
     private List<ChampsJSON> champs;
-    public ICommand addPick { get; set; }
-
-    public List<ChampsJSON> Champs
-    {
-        get => champs;
-        private set
-        {
-            champs = value;
-            OnPropertyChange();
-        }
-    }
-    
-    public List<ChampsJSON> ChampsToBan
-    {
-        get => champsToBan;
-        private set
-        {
-            champsToBan = value;
-            OnPropertyChange();
-        }
-    }
-    public List<ChampsJSON> ChampsToPick
-    {
-        get => champsToPick;
-        private set
-        {
-            champsToPick = value;
-            OnPropertyChange();
-        }
-    }
-    
-    
-    
     private string filter = "";
+    public ICommand addPick { get; set; }
+    public ICommand removePick { get; set; }
+    public ICommand addBan { get; set; }
+    public ICommand removeBan { get; set; }
 
-    public string Filter
+    public PicknBanViewModel()
     {
-        get => filter;
-        set
-        {
-            filter = value;
-            OnPropertyChange();
-            //Debug.WriteLine(filter);
-            Champs = FilterChamps();
-        }
+        addPick = new RelayCommand<ChampsJSON>(addChampion);
+        removePick = new RelayCommand<ChampsJSON>(removeChampion);
+        addBan = new RelayCommand<ChampsJSON>(addBanChampion);
+        removeBan = new RelayCommand<ChampsJSON>(removeBanChampion);
+        connect();
+        league.ChampSelectEvent += onChampSelectEvent;
     }
-    
-
     private List<ChampsJSON> FilterChamps()
     {
         if (filter == "") return allChamps;
@@ -87,44 +55,46 @@ public class PicknBanViewModel : INotifyPropertyChanged
 
     private async Task<List<ChampsJSON>> GetChamps()
     {
-        // return await league.getAllChamps();
-        return await Task.Run(() =>
-        {
-            return new List<ChampsJSON>
-            {
-                new ChampsJSON() { alias = "Adrian", id = 1, name = "Adrian" },
-                new ChampsJSON() { alias = "Eddie", id = 2, name = "Eduard" },
-                new ChampsJSON() { alias = "Sergious", id = 3, name = "Sergio" }
-            };
-        });
+        return await league.getAllChamps();
     }
-    
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    private void OnPropertyChange([CallerMemberName]string name = "")
+    private void addChampion(ChampsJSON champ)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        ChampsToPick.Add(champ);
     }
 
-    public PicknBanViewModel()
+    private void removeChampion(ChampsJSON champ)
     {
-        //MouseButtonEventArgs
-        addPick = new RelayCommand<object>(Clicked);
-        connect();
+        ChampsToPick.Remove(champ);
     }
 
-    private void Clicked(object vista)
+    private void addBanChampion(ChampsJSON champ)
     {
-        Debug.WriteLine(vista.GetType().FullName);
+        ChampsToBan.Add(champ);
+    }
+    private void removeBanChampion(ChampsJSON champ)
+    {
+        ChampsToBan.Remove(champ);
     }
 
     private async Task connect()
     {
-        //await league.connect();
+        await league.connect();
+        
+        
 
         allChamps = await GetChamps();
-        //allChamps.RemoveAt(0);
+        allChamps.RemoveAt(0);
         allChamps = allChamps.OrderBy(x => x.name).ToList();
         Champs = allChamps;
+    }
+    
+    public void onChampSelectEvent(object? sender, EventArgs e)
+    {
+        List<int> bans = new();
+        List<int> picks = new();
+        ChampsToBan.ToList().ForEach(ban=>bans.Add(ban.id));
+        ChampsToPick.ToList().ForEach(pick=>picks.Add(pick.id));
+        league.SetPicks(bans,picks);
+        Debug.WriteLine("Fasilito");
     }
 }

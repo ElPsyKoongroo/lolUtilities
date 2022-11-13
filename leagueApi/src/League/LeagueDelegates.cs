@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace LeagueUtilities;
 
 public partial class League{
@@ -22,11 +24,12 @@ public partial class League{
             case "Lobby":
             {
                 PickBan.Finish();
-
+                Console.WriteLine(hasToAutoAccept);
                 break;
             }
             case "ReadyCheck":
             {
+                if (!hasToAutoAccept) return;
                 await acceptGame();
                 break;
             }
@@ -36,9 +39,11 @@ public partial class League{
                 break;
             }
             case "ChampSelect":
-            {   
-                PickBan.New(api, SummonerId, true, true);
+            {
+                phase = (int)PHASES.CHAMPSELECT;
+                PickBan.New(api, SummonerId, hasToPick, hasToPickSkin);
                 PickBan.SetPicks(champsToBanId,champsToPickId);
+                
                 await PickBan.Start();
                 break;
             }
