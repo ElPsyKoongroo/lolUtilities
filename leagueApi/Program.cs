@@ -12,7 +12,12 @@ public static class Program
         //await A();
         await Prueba2();
     }
-    
+
+
+    private static async Task Prueba3()
+    {
+        LeagueClientApi a = await LeagueClientApi.ConnectAsync();
+    }
 
     /*private static async Task Prueba1()
     {

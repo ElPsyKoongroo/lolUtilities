@@ -24,7 +24,7 @@ public partial class League{
             case "Lobby":
             {
                 PickBan.Finish();
-                Console.WriteLine(hasToAutoAccept);
+                Debug.WriteLine(hasToAutoAccept);
                 break;
             }
             case "ReadyCheck":
@@ -40,7 +40,8 @@ public partial class League{
             }
             case "ChampSelect":
             {
-                phase = (int)PHASES.CHAMPSELECT;
+                phase = PHASES.CHAMPSELECT;
+                await Task.Delay(TimeSpan.FromMilliseconds(5));
                 PickBan.New(api, SummonerId, hasToPick, hasToPickSkin);
                 PickBan.SetPicks(champsToBanId,champsToPickId);
                 

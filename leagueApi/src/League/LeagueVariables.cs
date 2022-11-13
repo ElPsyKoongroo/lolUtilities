@@ -28,19 +28,19 @@ public partial class League{
     private List<int> champsToBanId;
     private long skinId;
     public EventHandler ChampSelectEvent;
-    private int _phase;
+    private PHASES _phase;
     //Temporal
     public bool hasToPick { get; set; }
     public bool hasToPickSkin { get; set; }
     public bool hasToAutoAccept { get; set; }
 
-    private int phase
+    private PHASES phase
     {
         get => _phase;
         set
         {
             _phase = value;
-            if (_phase == (int)PHASES.CHAMPSELECT)
+            if (_phase == PHASES.CHAMPSELECT)
             {
                 onChampSelect();
             }

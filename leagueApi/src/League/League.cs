@@ -12,7 +12,7 @@ public partial class League
         champsToBanId = new List<int>();
         champsToPickId = new List<int>();
         skinId = 0;
-        _phase = -1;
+        _phase = PHASES.NONE;
         hasToPick = false;
         hasToPickSkin = false;
         hasToAutoAccept = false;

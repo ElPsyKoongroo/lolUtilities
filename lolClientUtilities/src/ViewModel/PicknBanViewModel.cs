@@ -39,7 +39,6 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         addBan = new RelayCommand<ChampsJSON>(addBanChampion);
         removeBan = new RelayCommand<ChampsJSON>(removeBanChampion);
         connect();
-        league.ChampSelectEvent += onChampSelectEvent;
     }
     private List<ChampsJSON> FilterChamps()
     {
@@ -86,6 +85,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         allChamps.RemoveAt(0);
         allChamps = allChamps.OrderBy(x => x.name).ToList();
         Champs = allChamps;
+        league.ChampSelectEvent += onChampSelectEvent;
     }
     
     public void onChampSelectEvent(object? sender, EventArgs e)

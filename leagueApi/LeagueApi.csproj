@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <LangVersion>10</LangVersion>
     <WarningLevel>3</WarningLevel>
-    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
