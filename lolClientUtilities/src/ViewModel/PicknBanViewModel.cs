@@ -76,8 +76,6 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
 
     public async void connect(object? sender, EventArgs e)
     {
-        Debug.WriteLine("Conectando");
-        await league.connect();
         Debug.WriteLine("Conectado");
         
         allChamps = await GetChamps();
