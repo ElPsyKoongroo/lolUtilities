@@ -35,8 +35,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         league = League.GetLeague();
         if (!league.IsConnected) league.ClientConnected += connect;
     }
-
-
+    
     private ObservableCollection<ChampsJSON> FilterChamps()
     {
         if (filter == "") return new ObservableCollection<ChampsJSON>(allChamps);
