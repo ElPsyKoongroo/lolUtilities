@@ -1,3 +1,5 @@
+using System.Reflection.Metadata;
+
 namespace LeagueUtilities;
 
 public partial class League
@@ -16,6 +18,7 @@ public partial class League
         hasToPick = false;
         hasToPickSkin = false;
         hasToAutoAccept = false;
+        IsConnected = false;
     }
 
     public static League GetLeague()
@@ -67,7 +70,11 @@ public partial class League
         //Not here
         eventSubscribe("/lol-gameflow/v1/gameflow-phase","gameflowEvent");
         //eventSuscribe("/lol-champ-select/v1/session","sessionEvent");
+
+        IsConnected = true;
+        ClientConnected?.Invoke(this, EventArgs.Empty);
     }
+
     public void disconnect(){
         if(api is null) return;
         api.Disconnected -= OnDisconnected;

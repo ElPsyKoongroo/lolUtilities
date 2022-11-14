@@ -8,7 +8,7 @@ namespace lolClientUtilities.ViewModel;
 
 public partial class PicknBanViewModel
 {
-    public List<ChampsJSON> Champs
+    public ObservableCollection<ChampsJSON> Champs
     {
         get => champs;
         private set { champs = value; OnPropertyChange(); }
@@ -29,6 +29,7 @@ public partial class PicknBanViewModel
         get => filter;
         set
         {
+            if (value == filter) return;
             filter = value;
             OnPropertyChange();
             Champs = FilterChamps();

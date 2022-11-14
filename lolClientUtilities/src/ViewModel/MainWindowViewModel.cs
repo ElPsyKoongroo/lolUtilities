@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using CommunityToolkit.Mvvm.Input;
 using LeagueUtilities;
 using lolClientUtilities.View;
 
 namespace lolClientUtilities.ViewModel;
 
-public class MainWindowViewModel : INotifyPropertyChanged
+public partial class MainWindowViewModel : INotifyPropertyChanged
 {
-    private League _client = League.GetLeague();
+    private League _client;
 
     private string text = "";
     public string Text
@@ -52,8 +54,12 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public MainWindowViewModel()
     {
         ActualPage = new PicknBan();
+        _client = League.GetLeague();
     }
 
-
-
+    [RelayCommand]
+    public async Task Connect()
+    {
+        await _client.connect();
+    }
 }

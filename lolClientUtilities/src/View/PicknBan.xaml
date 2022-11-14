@@ -47,12 +47,12 @@
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction 
-                        Command="{Binding addPick}" 
+                        Command="{Binding addPickCommand}" 
                         CommandParameter="{Binding ElementName=listaChamps, Path=SelectedItem}"/>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseRightButtonUp">
                     <i:InvokeCommandAction 
-                        Command="{Binding addBan}" 
+                        Command="{Binding addBanCommand}" 
                         CommandParameter="{Binding ElementName=listaChamps, Path=SelectedItem}"/>
                 </i:EventTrigger>
                 
@@ -93,7 +93,7 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction
-                            Command="{Binding removePick}" 
+                            Command="{Binding remPickCommand}" 
                             CommandParameter="{Binding ElementName= listaChampsPicked ,Path=SelectedItem}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
@@ -128,7 +128,7 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction
-                            Command="{Binding removeBan}" 
+                            Command="{Binding remBanCommand}" 
                             CommandParameter="{Binding ElementName= listaChampsBanned ,Path=SelectedItem}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>

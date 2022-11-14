@@ -22,12 +22,14 @@ public partial class League{
     }
     
     private readonly Dictionary<string, EventHandler<LeagueEvent>> _events;
+    public bool IsConnected { get; private set; }
     private LeagueClientApi? api;
     private long SummonerId;
     private List<int> champsToPickId;
     private List<int> champsToBanId;
     private long skinId;
     public EventHandler ChampSelectEvent;
+    public EventHandler ClientConnected;
     private PHASES _phase;
     //Temporal
     public bool hasToPick { get; set; }
