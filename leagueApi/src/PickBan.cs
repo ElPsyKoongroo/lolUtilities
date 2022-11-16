@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using LeagueUtilities.DTO;
 namespace LeagueUtilities;
 
@@ -20,6 +21,8 @@ internal class PickBan
     private bool HasToPickRandomSkin {get; set;}
     private bool hasPickSkin;
     private bool finished;
+    private int PickPosition;
+    private int BanPosition;
 
     private PickBan(LeagueClientApi api, long SummonerId, bool pick, bool skin){
         this.api = api;
@@ -41,6 +44,9 @@ internal class PickBan
         championId = 0;
         ActorCellID = -1;
 
+        PickPosition = -1;
+        BanPosition = -1;
+
         finished = false;
     }
 
@@ -52,27 +58,44 @@ internal class PickBan
 
     public static async Task Start()
     {
-        var response = await _pickBan.api
+        var data = await _pickBan.api
             .RequestHandler
-            .GetJsonResponseAsync(
+            .GetResponseAsync<SessionsJSON>(
                 HttpMethod.Get,
                 "/lol-champ-select/v1/session"
             );
 
-        var data = JsonSerializer.Deserialize<SessionsJSON>(response, 
-            new JsonSerializerOptions
-            {
-                IncludeFields = true,
-                PropertyNameCaseInsensitive = true
-            }
-        );
         _pickBan.ActorCellID = data!.localPlayerCellId;
+
+        _pickBan.SearchIndex(data);
 
         _pickBan.api.EventHandler.Subscribe("/lol-champ-select/v1/session", OnSessionEvent);
         
         await _pickBan.PicknBan(data);
     }
 
+    private void SearchIndex(SessionsJSON data)
+    {
+        for (var i = 0; i < data.actions.Length; i++)
+        {
+            var action = data.actions[i];
+            if(action.Length == 0) continue;
+
+            switch (action[0].type)
+            {
+                case "ban" when action.Any(player=> player.actorCellId == ActorCellID):
+                    BanPosition = i;
+                    break;
+                case "pick" when action.Any(player=> player.actorCellId == ActorCellID):
+                    PickPosition = i;
+                    break;
+            }
+        }
+
+        Debug.WriteLineIf(BanPosition != -1, BanPosition);
+        Debug.WriteLineIf(PickPosition != -1, PickPosition);
+    }
+    
     public static void Finish()
     {
         if (_pickBan is null || _pickBan.finished) return;
@@ -98,16 +121,31 @@ internal class PickBan
             {
                 if(HasToPicknBan && !hasPrepicked){
                     hasPrepicked = true;
-                    await prePick(sessionData, ActorCellID);
+                    await prePick(sessionData);
                 }
                 break;
             }
             case "BAN_PICK" when HasToPicknBan && !hasBanned:
+                if (BanPosition == -1) SearchIndex(sessionData);
+                if (BanPosition == -1) break;
+                
+                if (sessionData.actions[BanPosition].Any(
+                        player=> player.actorCellId == ActorCellID
+                                 && player.isInProgress))
+                    
                 hasBanned = true;
                 await ban(sessionData);
                 return;
-            case "BAN_PICK" when HasToPicknBan && !hasPicked && sessionData.actions[BANS_REVEAL_ACTION][0].completed:
-                System.Console.WriteLine("PARA PICKEAR");
+            case "BAN_PICK" when HasToPicknBan && !hasPicked:
+                
+                if (PickPosition == -1) SearchIndex(sessionData);
+                if (PickPosition == -1) break;
+                
+                if (sessionData.actions[PickPosition].Any(
+                        player=> player.actorCellId == ActorCellID
+                                 && player.isInProgress))
+                                 
+                Console.WriteLine("PARA PICKEAR");
                 hasPicked = true;
                 await pick(sessionData);
                 return;
@@ -130,13 +168,12 @@ internal class PickBan
     }
 
 
-    private async Task prePick(SessionsJSON sessionData, int actorCellId){
+    private async Task prePick(SessionsJSON sessionData){
 
     if(champsToPickId.Count == 0) return;
 
-    ActorCellID = actorCellId;
 
-    var prePickAction = sessionData.actions[PICK_ACTION]
+    var prePickAction = sessionData.actions[PickPosition]
         .FirstOrDefault( x => x!.actorCellId == ActorCellID, null);
 
     if( prePickAction is null ) return;        
@@ -164,7 +201,7 @@ internal class PickBan
         Array.ForEach(sessionData.myTeam, myteam => prePicks.Add(myteam.championPickIntent));
         Array.ForEach(sessionData.bans.myTeamBans, teamBans => bannedAlready.Add(teamBans));
 
-        var banAction = sessionData.actions[BAN_ACTION]
+        var banAction = sessionData.actions[BanPosition]
             .FirstOrDefault(
                 x => x!.actorCellId == ActorCellID && x.isInProgress,
                 null);
@@ -220,7 +257,7 @@ internal class PickBan
         Array.ForEach( sessionData.bans.myTeamBans.Concat(sessionData.bans.theirTeamBans).ToArray() , teamBans => bannedAlready.Add(teamBans) );
 
         Log.Debug("Getting pick action");
-        var pickAction = sessionData.actions[PICK_ACTION]
+        var pickAction = sessionData.actions[PickPosition]
             .FirstOrDefault( x => x!.actorCellId == ActorCellID, null );
         if(pickAction is null) return;
         Log.Debug("Pick action ID: {@ID}", pickAction.id);
@@ -260,7 +297,6 @@ internal class PickBan
             prePicks.Clear();
             bannedAlready.Clear();
             return;
-            
         }
 
         
@@ -270,22 +306,12 @@ internal class PickBan
         Log.Information("Pick Skin");
 
         Log.Debug("Asking for skins");        
-        var response = await api.RequestHandler
-                            .GetJsonResponseAsync(HttpMethod.Get,
+        var skinData = await api.RequestHandler
+                            .GetResponseAsync<List<SkinJSON>>(HttpMethod.Get,
                             $"lol-champions/v1/inventories/{SummonerId}/champions/{championId}/skins");
         
-        if (response is null) return;
-        
-        var skinData = JsonSerializer.Deserialize<List<SkinJSON>>(response, 
-            new JsonSerializerOptions()
-            {
-                IncludeFields = true,
-                PropertyNameCaseInsensitive = true
-            }
-        );
+        if (skinData is null) return;
 
-        if(skinData is null) return;
-        
         var ownedSkins = skinData
             .Where(skin => skin.ownership.owned 
                 && !skin.isBase

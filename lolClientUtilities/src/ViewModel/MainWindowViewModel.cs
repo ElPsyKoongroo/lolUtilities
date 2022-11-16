@@ -24,14 +24,14 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
         set { text = value; OnPropertyChange(); }
     }
 
-    private bool autoAccept = false;
+    private bool autoAccept;
     public bool AutoAccept
     {
         get => autoAccept;
         set { autoAccept = value; OnPropertyChange(); _client.hasToAutoAccept = value; }
     }
-    
-    private bool picknBan = false;
+
+    private bool picknBan;
     public bool PicknBan
     { 
         get => picknBan;
@@ -61,5 +61,7 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
     public async Task Connect()
     {
         await _client.connect();
+        _client.hasToPick = picknBan;
+        _client.hasToAutoAccept = autoAccept;
     }
 }
