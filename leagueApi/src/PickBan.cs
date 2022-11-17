@@ -54,6 +54,11 @@ internal class PickBan
     {
         Finish();
         _pickBan = new PickBan(api, SummonerId, pick, skin);
+        Log.Debug(
+            "Creado nuevo objeto PicknBan:\n" +
+            "\tPick: {@Pick}\n" +
+            "\tSkin: {@Skin}",
+            pick, skin);
     }
 
     public static async Task Start()
@@ -66,6 +71,7 @@ internal class PickBan
             );
 
         _pickBan.ActorCellID = data!.localPlayerCellId;
+        Log.Debug("ActorCellID: {@ActorCellID}", _pickBan.ActorCellID);
 
         _pickBan.SearchIndex(data);
 
@@ -85,15 +91,14 @@ internal class PickBan
             {
                 case "ban" when action.Any(player=> player.actorCellId == ActorCellID):
                     BanPosition = i;
+                    Log.Debug("BanPosition: {@BanPosition}", i);
                     break;
                 case "pick" when action.Any(player=> player.actorCellId == ActorCellID):
                     PickPosition = i;
+                    Log.Debug("PickPosition: {@PickPosition}", i);
                     break;
             }
         }
-
-        Debug.WriteLineIf(BanPosition != -1, BanPosition);
-        Debug.WriteLineIf(PickPosition != -1, PickPosition);
     }
     
     public static void Finish()
@@ -102,6 +107,7 @@ internal class PickBan
         
         _pickBan.finished = true;
         _pickBan.api.EventHandler.Unsubscribe("/lol-champ-select/v1/session");
+        Log.Debug("PicknBan Terminado");
     }
 
     private static async void OnSessionEvent(object? sender, LeagueEvent e){
@@ -110,55 +116,74 @@ internal class PickBan
         if (sessionData is null) return;
         
         await _pickBan.PicknBan(sessionData);
-        
     }
 
     private async Task PicknBan(SessionsJSON sessionData)
     {
-        switch (sessionData.timer.phase)
+        try
         {
-            case "PLANNING":
+            switch (sessionData.timer.phase)
             {
-                if(HasToPicknBan && !hasPrepicked){
-                    hasPrepicked = true;
-                    await prePick(sessionData);
+                case "PLANNING":
+                    if (HasToPicknBan && !hasPrepicked)
+                    {
+                        hasPrepicked = true;
+                        Log.Debug("Entrando a PrePick");
+                        await prePick(sessionData);
+                    }
+
+                    break;
+                case "BAN_PICK" when HasToPicknBan:
+                {
+                    if (!hasBanned)
+                    {
+                        if (BanPosition == -1) SearchIndex(sessionData);
+                        if (BanPosition != -1)
+                        {
+
+                            if (sessionData.actions[BanPosition].Any(
+                                    player => player.actorCellId == ActorCellID
+                                              && player.isInProgress))
+
+                                hasBanned = true;
+                            Log.Debug("Entrando a Ban");
+                            await ban(sessionData);
+                        }
+                    }
+
+                    if (!hasPicked)
+                    {
+                        if (PickPosition == -1) SearchIndex(sessionData);
+                        if (PickPosition != -1)
+                        {
+                            if (sessionData.actions[PickPosition].Any(
+                                    player => player.actorCellId == ActorCellID
+                                              && player.isInProgress))
+
+                                hasPicked = true;
+                            Log.Debug("Entrando a Pick");
+                            await pick(sessionData);
+                        }
+                    }
+
+                    return;
                 }
-                break;
+                case "BAN_PICK":
+                    break;
+                default:
+                    if (HasToPickRandomSkin && !hasPickSkin)
+                    {
+                        hasPickSkin = true;
+                        Log.Debug("Entrando a PickSkin");
+                        await skinPick();
+                    }
+
+                    break;
             }
-            case "BAN_PICK" when HasToPicknBan && !hasBanned:
-                if (BanPosition == -1) SearchIndex(sessionData);
-                if (BanPosition == -1) break;
-                
-                if (sessionData.actions[BanPosition].Any(
-                        player=> player.actorCellId == ActorCellID
-                                 && player.isInProgress))
-                    
-                hasBanned = true;
-                await ban(sessionData);
-                return;
-            case "BAN_PICK" when HasToPicknBan && !hasPicked:
-                
-                if (PickPosition == -1) SearchIndex(sessionData);
-                if (PickPosition == -1) break;
-                
-                if (sessionData.actions[PickPosition].Any(
-                        player=> player.actorCellId == ActorCellID
-                                 && player.isInProgress))
-                                 
-                Console.WriteLine("PARA PICKEAR");
-                hasPicked = true;
-                await pick(sessionData);
-                return;
-            case "BAN_PICK":
-                break;
-            default:
-            {
-                if(HasToPickRandomSkin && !hasPickSkin){
-                    hasPickSkin = true;
-                    await skinPick();
-                }
-                break;
-            }
+        }
+        catch (Exception e)
+        {
+            Log.Debug(e, "ERROR:");
         }
     } 
 
@@ -168,32 +193,45 @@ internal class PickBan
     }
 
 
-    private async Task prePick(SessionsJSON sessionData){
-
-    if(champsToPickId.Count == 0) return;
-
-
-    var prePickAction = sessionData.actions[PickPosition]
-        .FirstOrDefault( x => x!.actorCellId == ActorCellID, null);
-
-    if( prePickAction is null ) return;        
-
-    var body = new { championId = champsToPickId[0] };
-
-    if(true)
-        await Task.Delay(League.getTimeSpanBetween(1,2));
-
-    var response = await api
-        .RequestHandler
-        .GetJsonResponseAsync(HttpMethod.Patch,
-        $"/lol-champ-select/v1/session/actions/{prePickAction.id}", 
-        Enumerable.Empty<string>(), body);
+    private async Task prePick(SessionsJSON sessionData)
+    {
+        var champsToPick = champsToPickId.Count;
+        Log.Debug("Champs to PrePick: {@PrePicks}", champsToPick);
         
-    return;
+        if (champsToPick == 0)
+        {
+            Log.Information("No se puede PrePickear nada");
+            return;
+        }
+        
+        if(champsToPickId.Count == 0) return;
+
+        var prePickAction = sessionData.actions[PickPosition]
+            .FirstOrDefault( x => x!.actorCellId == ActorCellID, null);
+
+        if( prePickAction is null ) return;        
+
+        var body = new { championId = champsToPickId[0] };
+
+        if(true)
+            await Task.Delay(League.getTimeSpanBetween(1,2));
+
+        var response = await api
+            .RequestHandler
+            .GetJsonResponseAsync(HttpMethod.Patch,
+            $"/lol-champ-select/v1/session/actions/{prePickAction.id}", 
+            Enumerable.Empty<string>(), body);
     }
     private async Task ban(SessionsJSON sessionData)
     {
-        if(champsToBanId.Count == 0) return;
+        var champsToBan = champsToBanId.Count;
+        Log.Debug("Champs to Ban: {@Bans}", champsToBan);
+        
+        if (champsToBan == 0)
+        {
+            Log.Information("No se puede banear nada");
+            return;
+        }
 
         List<int> prePicks = new();
         List<int> bannedAlready = new();  
@@ -242,9 +280,10 @@ internal class PickBan
     }
     private async Task pick(SessionsJSON sessionData)
     {
-        var total = champsToPickId.Count;
-        Log.Information("Champ to pick {@Count}", total);
-        if (total == 0)
+        var champsToPick = champsToPickId.Count;
+        Log.Debug("Champs to Pick: {@Pick}", champsToPick);
+
+        if (champsToPick == 0)
         {
             Log.Information("No se puede pickear nada");
             return;

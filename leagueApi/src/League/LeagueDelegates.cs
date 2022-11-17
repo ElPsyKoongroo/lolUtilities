@@ -27,15 +27,15 @@ public partial class League{
                 Debug.WriteLine(hasToAutoAccept);
                 break;
             }
+            case "MatchMaking":
+            {
+                PickBan.Finish();
+                break;
+            }
             case "ReadyCheck":
             {
                 if (!hasToAutoAccept) return;
                 await acceptGame();
-                break;
-            }
-            case "MatchMaking":
-            {
-                PickBan.Finish();
                 break;
             }
             case "ChampSelect":
@@ -46,6 +46,7 @@ public partial class League{
                 PickBan.SetPicks(champsToBanId,champsToPickId);
                 
                 await PickBan.Start();
+                
                 break;
             }
             case "InProgress":
@@ -53,7 +54,6 @@ public partial class League{
                 PickBan.Finish();
                 break;
             }
-            
         }
     }
 
