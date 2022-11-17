@@ -122,18 +122,21 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         champsToPick = new ObservableCollection<ChampsJSON>(dataDeserialized.picks);
     }
 
-    public async void connect(object? sender, EventArgs e)
+    private async void connect(object? sender, EventArgs e)
     {
         Debug.WriteLine("Conectado");
-        
+
+#if !TEST
         allChamps = await GetChamps();
         allChamps.RemoveAt(0);
+        league.ChampSelectEvent += onChampSelectEvent;
+#else
+        allChamps = TEST_GetChamps();
+#endif
         allChamps = allChamps.OrderBy(x => x.name).ToList();
         Champs = new ObservableCollection<ChampsJSON>(allChamps);
-        
-        league.ChampSelectEvent += onChampSelectEvent;
-        league.ClientConnected -= connect;
         CanPickSkin = true;
+        league.ClientConnected -= connect;
     }
     
     public void onChampSelectEvent(object? sender, EventArgs e)
@@ -145,4 +148,22 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         league.SetPicks(bans,picks);
         Debug.WriteLine("Fasilito");
     }
+
+#region TEST
+#if TEST
+    public partial class PicknBanViewModel
+    {
+        private List<ChampsJSON> TEST_GetChamps()
+        {
+            return new List<ChampsJSON>()
+            {
+                new ChampsJSON() { alias = "Adri", id = 1, name = "Adrian" },
+                new ChampsJSON() { alias = "Eddie", id = 2, name = "Eduard" },
+                new ChampsJSON() { alias = "Sargio", id = 3, name = "Sergio" }
+            };
+        }
+    }
+#endif
+#endregion
+    
 }

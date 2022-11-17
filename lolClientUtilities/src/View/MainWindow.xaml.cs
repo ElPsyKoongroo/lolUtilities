@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,11 +17,12 @@ namespace lolClientUtilities.View;
 /// </summary>
 public partial class MainWindow : Window
 {
-    
+    public static bool test;
 
     public MainWindow()
     {
         InitializeComponent();
+        
     }
 
     private void MoverVentana(object sender, MouseButtonEventArgs e)

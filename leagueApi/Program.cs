@@ -10,7 +10,13 @@ public static class Program
     public static async Task Main()
     {
         //await A();
-        await Prueba2();
+        //await Prueba2();
+        var a = Environment.GetCommandLineArgs();
+
+        foreach (var VARIABLE in a)
+        {
+            Console.WriteLine(VARIABLE);
+        }
     }
 
 

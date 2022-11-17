@@ -4,8 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <LangVersion>11</LangVersion>
+    <LangVersion>10</LangVersion>
     <WarningLevel>3</WarningLevel>
+    <OutputType>Exe</OutputType>
+    <Configurations>Debug;Release;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
