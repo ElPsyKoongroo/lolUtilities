@@ -31,6 +31,7 @@ public partial class League{
     public EventHandler ChampSelectEvent;
     public EventHandler ClientConnected;
     private PHASES _phase;
+    private bool initialized;
     //Temporal
     public bool hasToPick { get; set; }
     public bool hasToPickSkin { get; set; }

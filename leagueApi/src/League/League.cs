@@ -19,6 +19,7 @@ public partial class League
         hasToPickSkin = false;
         hasToAutoAccept = false;
         IsConnected = false;
+        initialized = false;
     }
 
     public static League GetLeague()
@@ -63,14 +64,15 @@ public partial class League
 
         if(api is null) throw new Exception("No se ha podido conectar al cliente");
         Log.Debug("Contectado al cliente del lol");
-
-        setEvents();
         await getSummoner();
 
-        //Not here
-        eventSubscribe("/lol-gameflow/v1/gameflow-phase","gameflowEvent");
-        //eventSuscribe("/lol-champ-select/v1/session","sessionEvent");
-
+        if (!initialized)
+        {
+            setEvents();
+            eventSubscribe("/lol-gameflow/v1/gameflow-phase","gameflowEvent");
+            initialized = true;
+        }
+        
         IsConnected = true;
         ClientConnected?.Invoke(this, EventArgs.Empty);
     }
