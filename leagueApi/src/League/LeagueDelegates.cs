@@ -21,19 +21,26 @@ public partial class League{
 
         switch(msg)
         {
+            case "None":
+            {
+                phase = PHASES.NONE;
+                break;
+            }
             case "Lobby":
             {
+                phase = PHASES.LOBBY;
                 PickBan.Finish();
-                Debug.WriteLine(hasToAutoAccept);
                 break;
             }
             case "MatchMaking":
             {
+                phase = PHASES.MATCHMAKING;
                 PickBan.Finish();
                 break;
             }
             case "ReadyCheck":
             {
+                phase = PHASES.READYCHECK;
                 if (!hasToAutoAccept) return;
                 await acceptGame();
                 break;
@@ -51,6 +58,7 @@ public partial class League{
             }
             case "InProgress":
             {
+                phase = PHASES.INPROGRESS;
                 PickBan.Finish();
                 break;
             }
