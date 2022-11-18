@@ -185,7 +185,7 @@ internal class PickBan
     } 
 
     public static void SetPicks(List<int> bans, List<int> picks){
-        _pickBan.champsToBanId = bans;
+        _pickBan!.champsToBanId = bans;
         _pickBan.champsToPickId = picks;
     }
 
