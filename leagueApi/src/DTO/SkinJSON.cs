@@ -1,5 +1,5 @@
 namespace LeagueUtilities.DTO;
-
+#nullable disable
 public class SkinJSON
 {
     public int championId { get; set; }

@@ -1,5 +1,5 @@
 namespace LeagueUtilities.DTO;
-
+#nullable disable
 public class ChampsJSON
 {
     public int id { get; set; }

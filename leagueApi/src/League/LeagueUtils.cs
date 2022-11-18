@@ -2,7 +2,7 @@ namespace LeagueUtilities;
 
 public partial class League
 {
-    public static TimeSpan getTimeSpanBetween(int start, int end){
+    internal static TimeSpan getTimeSpanBetween(int start, int end){
         return TimeSpan.FromSeconds( Random.Shared.Next(start * 10, end * 10) / 10.0 );
     }
     

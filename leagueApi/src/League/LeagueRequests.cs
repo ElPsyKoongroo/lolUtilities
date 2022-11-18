@@ -34,13 +34,12 @@ public partial class League
             .GetJsonResponseAsync(HttpMethod.Get,
                 "lol-champ-select/v1/current-champion");
         
-        
-        Log.Information(response);
+        Log.Debug(response);
     }
 
-    public async Task acceptGame(){
+    private async Task acceptGame(){
         if( api is null ) return;
-        await Task.Delay(getTimeSpanBetween(1,2));
+        await Task.Delay(getTimeSpanBetween(3,4));
         var json = await api
                 .RequestHandler
                 .GetJsonResponseAsync(HttpMethod.Post,

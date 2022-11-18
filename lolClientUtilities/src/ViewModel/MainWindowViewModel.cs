@@ -15,7 +15,8 @@ namespace lolClientUtilities.ViewModel;
 
 public partial class MainWindowViewModel : INotifyPropertyChanged
 {
-    private League _client;
+    private readonly League _client;
+    private PicknBan? picknBanView;
 
     private string text = "";
     public string Text
@@ -53,7 +54,6 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
 
     public MainWindowViewModel()
     {
-        ActualPage = new PicknBan();
         _client = League.GetLeague();
     }
 
@@ -63,5 +63,14 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
         await _client.connect();
         _client.hasToPick = picknBan;
         _client.hasToAutoAccept = autoAccept;
+    }
+
+    [RelayCommand]
+    public void onPicknBanSettings()
+    {
+        if (ActualPage is not View.PicknBan)
+            ActualPage = picknBanView ??= new PicknBan();
+        else
+            ActualPage = null;
     }
 }

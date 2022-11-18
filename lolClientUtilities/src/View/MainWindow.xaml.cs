@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using LeagueUtilities;
 
 
 /*
@@ -22,7 +23,6 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        
     }
 
     private void MoverVentana(object sender, MouseButtonEventArgs e)
@@ -37,10 +37,6 @@ public partial class MainWindow : Window
     }
     private void MinimizeButton_OnClick(object sender, RoutedEventArgs e){
         Application.Current.MainWindow.WindowState = WindowState.Minimized;
-    }
-
-    private void onPicknBanSettings(object sender, RoutedEventArgs e){
-        
     }
 }
 
