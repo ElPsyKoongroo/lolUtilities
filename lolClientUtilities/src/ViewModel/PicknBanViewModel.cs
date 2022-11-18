@@ -46,6 +46,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
     {
         league = League.GetLeague();
         if (!league.IsConnected) league.ClientConnected += connect;
+        else connect(null, EventArgs.Empty);
         if (league.IsConnected) CanPickSkin = true;
         Load();
     }

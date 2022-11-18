@@ -74,7 +74,7 @@ public partial class League
         }
         
         IsConnected = true;
-        ClientConnected?.Invoke(this, EventArgs.Empty);
+        ClientConnected.Invoke(this, EventArgs.Empty);
     }
 
     public void disconnect(){
