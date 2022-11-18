@@ -13,7 +13,7 @@ using lolClientUtilities.View;
 
 namespace lolClientUtilities.ViewModel;
 
-public partial class MainWindowViewModel : INotifyPropertyChanged
+public class MainWindowViewModel : INotifyPropertyChanged
 {
     private readonly League _client;
     private PicknBan? picknBanView;
@@ -60,9 +60,12 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
     [RelayCommand]
     public async Task Connect()
     {
-        await _client.connect();
-        _client.hasToPick = picknBan;
-        _client.hasToAutoAccept = autoAccept;
+        if (!_client.IsConnected)
+        {
+            await _client.connect();
+            _client.hasToPick = picknBan;
+            _client.hasToAutoAccept = autoAccept;
+        }
     }
 
     [RelayCommand]
