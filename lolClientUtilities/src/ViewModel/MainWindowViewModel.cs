@@ -13,7 +13,7 @@ using lolClientUtilities.View;
 
 namespace lolClientUtilities.ViewModel;
 
-public class MainWindowViewModel : INotifyPropertyChanged
+public partial class MainWindowViewModel : INotifyPropertyChanged
 {
     private readonly League _client;
     private PicknBan? picknBanView;
