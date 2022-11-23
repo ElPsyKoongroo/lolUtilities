@@ -59,11 +59,17 @@ public partial class League
     }
     public async Task connect()
     {
-        Log.Debug("Contectando con el cliente del lol");
+        Log.Logger.Debug("Contectando con el cliente del lol");
         api = await LeagueClientApi.ConnectAsync();
 
-        if(api is null) throw new Exception("No se ha podido conectar al cliente");
-        Log.Debug("Contectado al cliente del lol");
+        if (api is null)
+        {
+            var e = new Exception("No se ha podido conectar al cliente");
+            Log.Logger.Debug(e, "No se ha podido conectar con el lol");
+            throw e;
+        }
+        
+        Log.Logger.Debug("Contectado al cliente del lol");
         await getSummoner();
 
         if (!initialized)
@@ -74,7 +80,7 @@ public partial class League
         }
         
         IsConnected = true;
-        ClientConnected.Invoke(this, EventArgs.Empty);
+        ClientConnected?.Invoke(this, EventArgs.Empty);
     }
 
     public void disconnect(){

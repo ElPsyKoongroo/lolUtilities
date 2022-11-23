@@ -11,17 +11,18 @@ public partial class League
         //.Filter.ByExcluding(Matching.WithProperty<int>("Count", p => p < 5))
         const string formato = "[{Timestamp:HH:mm:ss.ffffff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-        var logFilePath = Path.Combine(Environment.CurrentDirectory, "logs", "log_.txt");
+        var logFileFolder = Path.Combine(Environment.CurrentDirectory, "logs");
+        var logFilePath = Path.Combine(logFileFolder, "log_.txt");
+
+        Directory.CreateDirectory(logFileFolder);
 
         Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
             .WriteTo.File(
                 path: logFilePath,
                 outputTemplate: formato,
                 restrictedToMinimumLevel: LogEventLevel.Debug,
                 rollingInterval: RollingInterval.Day)
-            /*.WriteTo.Console(
-                outputTemplate: formato,
-                restrictedToMinimumLevel: LogEventLevel.Information)*/
             .CreateLogger();
     }
 }

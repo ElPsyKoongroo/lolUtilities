@@ -34,7 +34,7 @@ public partial class League
             .GetJsonResponseAsync(HttpMethod.Get,
                 "lol-champ-select/v1/current-champion");
         
-        Log.Debug(response);
+        Log.Logger.Debug(response);
     }
 
     private async Task acceptGame(){

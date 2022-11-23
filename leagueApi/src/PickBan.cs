@@ -47,18 +47,16 @@ internal class PickBan
 
         finished = false;
     }
-
     public static void New(LeagueClientApi api, long SummonerId, bool pick = false, bool skin = false)
     {
         Finish();
         _pickBan = new PickBan(api, SummonerId, pick, skin);
-        Log.Debug(
+        Log.Logger.Debug(
             "Creado nuevo objeto PicknBan:\n" +
             "\tPick: {@Pick}\n" +
             "\tSkin: {@Skin}",
             pick, skin);
     }
-    
     public static async Task Start()
     {
         var data = await _pickBan!.api
@@ -69,7 +67,7 @@ internal class PickBan
             );
 
         _pickBan.ActorCellID = data!.localPlayerCellId;
-        Log.Debug("ActorCellID: {@ActorCellID}", _pickBan.ActorCellID);
+        Log.Logger.Debug("ActorCellID: {@ActorCellID}", _pickBan.ActorCellID);
 
         _pickBan.SearchIndex(data);
 
@@ -77,7 +75,6 @@ internal class PickBan
         
         await _pickBan.PicknBan(data);
     }
-
     private void SearchIndex(SessionsJSON data)
     {
         for (var i = 0; i < data.actions.Length; i++)
@@ -89,27 +86,25 @@ internal class PickBan
             {
                 case "ban" when action.Any(player=> player.actorCellId == ActorCellID):
                     BanPosition = i;
-                    Log.Debug("BanPosition: {@BanPosition}", i);
+                    Log.Logger.Debug("BanPosition: {@BanPosition}", i);
                     if (PickPosition != -1) return;
                     break;
                 case "pick" when action.Any(player=> player.actorCellId == ActorCellID):
                     PickPosition = i;
-                    Log.Debug("PickPosition: {@PickPosition}", i);
+                    Log.Logger.Debug("PickPosition: {@PickPosition}", i);
                     if (BanPosition != -1) return;
                     break;
             }
         }
     }
-    
     public static void Finish()
     {
         if (_pickBan is null || _pickBan.finished) return;
         
         _pickBan.finished = true;
         _pickBan.api.EventHandler.Unsubscribe("/lol-champ-select/v1/session");
-        Log.Debug("PicknBan Terminado");
+        Log.Logger.Debug("PicknBan Terminado");
     }
-
     private static async void OnSessionEvent(object? sender, LeagueEvent e){
 
         var sessionData = e.Data.ToObject<SessionsJSON>();
@@ -117,7 +112,6 @@ internal class PickBan
         
         await _pickBan.PicknBan(sessionData);
     }
-
     private async Task PicknBan(SessionsJSON sessionData)
     {
         try
@@ -128,7 +122,7 @@ internal class PickBan
                     if (HasToPicknBan && !hasPrepicked)
                     {
                         hasPrepicked = true;
-                        Log.Debug("Entrando a PrePick");
+                        Log.Logger.Debug("Entrando a PrePick");
                         await prePick(sessionData);
                     }
 
@@ -145,7 +139,7 @@ internal class PickBan
                                               && player.isInProgress))
                             {
                                 hasBanned = true;
-                                Log.Debug("Entrando a Ban");
+                                Log.Logger.Debug("Entrando a Ban");
                                 await ban(sessionData);
                             }
                         }
@@ -160,7 +154,7 @@ internal class PickBan
                                       && player.isInProgress)) return;
                     
                     hasPicked = true;
-                    Log.Debug("Entrando a Pick");
+                    Log.Logger.Debug("Entrando a Pick");
                     await pick(sessionData);
 
                     return;
@@ -171,7 +165,7 @@ internal class PickBan
                     if (HasToPickRandomSkin && !hasPickSkin)
                     {
                         hasPickSkin = true;
-                        Log.Debug("Entrando a PickSkin");
+                        Log.Logger.Debug("Entrando a PickSkin");
                         await skinPick();
                     }
 
@@ -180,24 +174,21 @@ internal class PickBan
         }
         catch (Exception e)
         {
-            Log.Debug(e, "ERROR:");
+            Log.Logger.Debug(e, "ERROR:");
         }
-    } 
-
+    }
     public static void SetPicks(List<int> bans, List<int> picks){
         _pickBan!.champsToBanId = bans;
         _pickBan.champsToPickId = picks;
     }
-
-
     private async Task prePick(SessionsJSON sessionData)
     {
         var champsToPick = champsToPickId.Count;
-        Log.Debug("Champs to PrePick: {@PrePicks}", champsToPick);
+        Log.Logger.Debug("Champs to PrePick: {@PrePicks}", champsToPick);
         
         if (champsToPick == 0)
         {
-            Log.Debug("No se puede PrePickear nada");
+            Log.Logger.Debug("No se puede PrePickear nada");
             return;
         }
         
@@ -213,7 +204,7 @@ internal class PickBan
         if (true)
         {
             TimeSpan time = League.getTimeSpanBetween(1, 2);
-            Log.Debug("Esperando {@Tiempo}", time);
+            Log.Logger.Debug("Esperando {@Tiempo}", time);
             await Task.Delay(time);
         }
 
@@ -222,15 +213,17 @@ internal class PickBan
             .GetJsonResponseAsync(HttpMethod.Patch,
             $"/lol-champ-select/v1/session/actions/{prePickAction.id}", 
             Enumerable.Empty<string>(), body);
+        
+        Log.Logger.Debug("PrePick de {@Champ}", champsToPickId[0]);
     }
     private async Task ban(SessionsJSON sessionData)
     {
         var champsToBan = champsToBanId.Count;
-        Log.Debug("Champs to Ban: {@Bans}", champsToBan);
+        Log.Logger.Debug("Champs to Ban: {@Bans}", champsToBan);
         
         if (champsToBan == 0)
         {
-            Log.Debug("No se puede banear nada");
+            Log.Logger.Debug("No se puede banear nada");
             return;
         }
 
@@ -250,7 +243,7 @@ internal class PickBan
         if (true)
         {
             var time = League.getTimeSpanBetween(2, 3);
-            Log.Debug("Esperando {@Tiempo}", time);
+            Log.Logger.Debug("Esperando {@Tiempo}", time);
             await Task.Delay(time);
         }
 
@@ -261,7 +254,7 @@ internal class PickBan
             var body = new { championId = id , completed = true};
 
 
-            Log.Debug("Baneando a {@ID}", id);
+            Log.Logger.Debug("Baneando a {@ID}", id);
             try
             {
                 await api
@@ -269,12 +262,12 @@ internal class PickBan
                     .GetJsonResponseAsync(HttpMethod.Patch,
                         $"/lol-champ-select/v1/session/actions/{banAction.id}",
                         Enumerable.Empty<string>(), body);
-                Log.Debug("{@ID} baneado", id);
+                Log.Logger.Debug("{@ID} baneado", id);
                 return;
             }
             catch(Exception e)
             {
-                Log.Debug(e, "No se ha podido banear a {@ID}", id);
+                Log.Logger.Debug(e, "No se ha podido banear a {@ID}", id);
                 ///     TODO -> Hacer que cuando no pueda banear compruebe si es porque
                 ///      ese campeon ya lo ha baneado otra persona o porque ya se ha
                 ///     baneado otro campeon
@@ -286,11 +279,11 @@ internal class PickBan
     private async Task pick(SessionsJSON sessionData)
     {
         var champsToPick = champsToPickId.Count;
-        Log.Debug("Champs to Pick: {@Pick}", champsToPick);
+        Log.Logger.Debug("Champs to Pick: {@Pick}", champsToPick);
 
         if (champsToPick == 0)
         {
-            Log.Debug("No se puede pickear nada");
+            Log.Logger.Debug("No se puede pickear nada");
             return;
         }
 
@@ -299,35 +292,35 @@ internal class PickBan
         
         Array.ForEach( sessionData.bans.myTeamBans.Concat(sessionData.bans.theirTeamBans).ToArray() , teamBans => bannedAlready.Add(teamBans) );
 
-        Log.Debug("Getting pick action");
+        Log.Logger.Debug("Getting pick action");
         
         var pickAction = sessionData.actions[PickPosition]
             .FirstOrDefault( x => x!.actorCellId == ActorCellID, null );
         if(pickAction is null) return;
         
-        Log.Debug("Pick action ID: {@ID}", pickAction.id);
+        Log.Logger.Debug("Pick action ID: {@ID}", pickAction.id);
         
         
         if (true)
         {
             TimeSpan time = League.getTimeSpanBetween(3, 4);
-            Log.Debug("Esperando {@Tiempo}", time);
+            Log.Logger.Debug("Esperando {@Tiempo}", time);
             await Task.Delay(time);
         }
 
         foreach(var id in champsToPickId)
         {
-            Log.Debug("Intentando pickear a {@Champ}", id);
+            Log.Logger.Debug("Intentando pickear a {@Champ}", id);
 
             if (bannedAlready.Contains(id))
             {
-                Log.Debug("Already banned");
+                Log.Logger.Debug("Already banned");
                 continue;
             }
 
             var body = new { championId = id , completed = true};
             
-            Log.Debug("Pickeando a {@Champ}", id);
+            Log.Logger.Debug("Pickeando a {@Champ}", id);
             try
             {
                 await api
@@ -335,14 +328,14 @@ internal class PickBan
                     .GetJsonResponseAsync(HttpMethod.Patch,
                         $"/lol-champ-select/v1/session/actions/{pickAction.id}",
                         Enumerable.Empty<string>(), body);
-                Log.Debug("{@Champ} pickeado", id);
+                Log.Logger.Debug("{@Champ} pickeado", id);
                 
                 championId = id;
                 return;
             }
             catch (Exception e)
             {
-                Log.Debug(e, "No se ha podido pickear a {@Champ}", id);
+                Log.Logger.Debug(e, "No se ha podido pickear a {@Champ}", id);
             }
         }
 
@@ -350,9 +343,9 @@ internal class PickBan
     }
     private async Task skinPick()
     {
-        Log.Debug("Pick Skin");
+        Log.Logger.Debug("Pick Skin");
 
-        Log.Debug("Asking for skins");        
+        Log.Logger.Debug("Asking for skins");        
         var skinData = await api.RequestHandler
                             .GetResponseAsync<List<SkinJSON>>(HttpMethod.Get,
                             $"lol-champions/v1/inventories/{SummonerId}/champions/{championId}/skins");
@@ -365,20 +358,20 @@ internal class PickBan
                 && !skin.lastSelected)
             .Select(x=> x.id).ToList();
         
-        Log.Debug("Total skins: {@NSkins}");
+        Log.Logger.Debug("Total skins: {@NSkins}");
         
         if(ownedSkins.Count == 0) return;
 
         var body = new { selectedSkinId =  ownedSkins[Random.Shared.Next(0,ownedSkins.Count)] };
 
         await Task.Delay(League.getTimeSpanBetween(2,3));
-        Log.Debug("Picking Skin {@Skin}",body.selectedSkinId);
+        Log.Logger.Debug("Picking Skin {@Skin}",body.selectedSkinId);
         
         await api.RequestHandler
             .GetJsonResponseAsync(HttpMethod.Patch,
                 "/lol-champ-select/v1/session/my-selection/",
                 Enumerable.Empty<string>(), body
             );
-        Log.Debug("Skin {@Skin} picked",body.selectedSkinId);
+        Log.Logger.Debug("Skin {@Skin} picked",body.selectedSkinId);
     }
 }

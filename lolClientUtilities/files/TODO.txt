@@ -1,5 +1,23 @@
+
+
+Alpha 0.2
+1. Actualizar la interfaz, poner estilos, etc...
+2. Leyenda sobre los atajos de la app.
+3. Cambiar el orden de los PicknBan
+4. Mirar actualizaciones
+5. Perfiles de PicknBan
+6. Arreglar un par de Bugs, prePick, ...
+ 
+
+
+
+
+
+
+MAIN 1. Runas
+
 1 - Loggear un poco las cosas
-    - Log.Debug(error(si hay), "mensajito", variables(si hay))
+    - Log.Logger.Debug(error(si hay), "mensajito", variables(si hay))
     - Log.Information(...)
 
     Log.Information va a consola y fichero

@@ -20,6 +20,7 @@ using LeagueUtilities;
 using LeagueUtilities.DTO;
 using lolClientUtilities.JSON_Classes;
 using lolClientUtilities.View;
+using Log = Serilog.Log;
 
 
 namespace lolClientUtilities.ViewModel;
@@ -45,9 +46,18 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
     public PicknBanViewModel()
     {
         league = League.GetLeague();
-        if (!league.IsConnected) league.ClientConnected += connect;
-        else connect(null, EventArgs.Empty);
-        if (league.IsConnected) CanPickSkin = true;
+
+        if (!league.IsConnected)
+        {
+            Log.Logger.Debug("[PNB VM] No está creado aún el cliente");
+            league.ClientConnected += connect;
+        }
+        else
+        {
+            Log.Logger.Debug("[PNB VM] Ya está creado el cliente");
+            connect(null, EventArgs.Empty);
+            CanPickSkin = true;
+        }
         Load();
     }
     
@@ -149,6 +159,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         league.SetPicks(bans,picks);
         Debug.WriteLine("Fasilito");
     }
+}
 
 #region TEST
 #if TEST
@@ -167,4 +178,3 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
 #endif
 #endregion
     
-}

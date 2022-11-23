@@ -10,6 +10,8 @@ using System.Windows.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using LeagueUtilities;
 using lolClientUtilities.View;
+using Serilog.Core;
+using Serilog;
 
 namespace lolClientUtilities.ViewModel;
 
@@ -55,6 +57,7 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
     public MainWindowViewModel()
     {
         _client = League.GetLeague();
+        Log.Logger.Debug("Cliente creado");
     }
 
     [RelayCommand]
