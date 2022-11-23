@@ -2,29 +2,77 @@
 using LeagueUtilities;
 using LCUSharp;
 using LCUSharp.Websocket;
+using LeagueUtilities.DTO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace LeagueAPI;
 
 public static class Program
 {
+    private static LeagueClientApi api;
+    private static int cont = 0;
+    private static string path = Path.Combine(Environment.CurrentDirectory, "sessions", "session_"); 
     public static async Task Main()
     {
         //await A();
         //await Prueba2();
-        var a = Environment.GetCommandLineArgs();
+        api = await LeagueClientApi.ConnectAsync();
+         
+        api?.EventHandler.Subscribe("/lol-gameflow/v1/gameflow-phase", OnGameflowEvent);
 
-        foreach (var VARIABLE in a)
-        {
-            Console.WriteLine(VARIABLE);
-        }
+        Console.WriteLine("Esperando");
+
+        Console.ReadKey();
+    }
+
+    private static async void OnGameflowEvent(object? sender, LeagueEvent e)
+    {
+        if (e.Data.ToString() != "ChampSelect") return;
+        
+        var data = await api
+            .RequestHandler
+            .GetJsonResponseAsync(
+                HttpMethod.Get,
+                "/lol-champ-select/v1/session"
+            );
+        api.EventHandler.Subscribe("/lol-champ-select/v1/session", OnSessionEvent);
+
+        Console.WriteLine("Ha entrado");
+        
+        await Write(data);
+    }
+
+    private static async void OnSessionEvent(object? sender, LeagueEvent e)
+    {
+        var sessionData = e.Data.ToString();
+        if (sessionData is null) return;
+        
+        await Write(sessionData);
+    }
+
+    private static async Task Write(string data)
+    {
+        Console.WriteLine($"Escribiendo {++cont}");
+
+        data = JToken.Parse(data).ToString(Formatting.Indented);
+
+        data = $"{DateTime.Now:hh:mm:ss.ffffff}:\n\n{data}";
+
+        var file = File.CreateText($"{path}{cont}");
+
+        await file.WriteAsync(data);
+        
+        file.Close();
     }
 
 
-    private static async Task Prueba3()
+    /*   private static async Task Prueba3()
     {
         LeagueClientApi a = await LeagueClientApi.ConnectAsync();
     }
-
+*/
     /*private static async Task Prueba1()
     {
         League n = new();

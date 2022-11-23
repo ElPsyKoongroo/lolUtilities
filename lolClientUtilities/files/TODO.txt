@@ -20,7 +20,6 @@ MAIN 1. Runas
     - Log.Logger.Debug(error(si hay), "mensajito", variables(si hay))
     - Log.Information(...)
 
-    Log.Information va a consola y fichero
     Log.Deebug solo a fichero
 
 2 - Crear una clase que se encargue de prePick/ban/pick/pickSkin
