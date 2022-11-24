@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="src/Styles/colors.xaml"/>
                 <ResourceDictionary Source="src/Styles/buttons.xaml"/>
                 <ResourceDictionary Source="src/Styles/labels.xaml"/>
+                <ResourceDictionary Source="src/Styles/ListView_PicknBan.xaml"/>
                 <ResourceDictionary Source="resources/icons/close.xaml"/>
                 <ResourceDictionary Source="resources/icons/minimize.xaml"/>
                 <ResourceDictionary Source="resources/icons/settings.xaml"/>

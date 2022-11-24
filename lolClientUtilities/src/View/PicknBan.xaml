@@ -40,9 +40,12 @@
                   ItemsSource="{Binding Champs}"
                   Background="Transparent"
                   Width="300"
+                  Height="600"
                   HorizontalAlignment="Center"
                   HorizontalContentAlignment="Center"
-                  Name="listaChamps">
+                  VerticalAlignment="Top"
+                  Name="listaChamps"
+                  Style="{StaticResource ListView_PicknBan}">
             
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
@@ -60,35 +63,20 @@
             </i:Interaction.Triggers>
             
             
-
-            
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderBrush="Black" Margin="3" BorderThickness="4"
-                            CornerRadius="3" Width="200"
-                            HorizontalAlignment="Center"
-                            Background="Gray">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding name}" FontSize="20"/>
-                            </StackPanel>
-                        </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            
         </ListView>
         
         <StackPanel Grid.Column="1" Grid.Row="1">
             
         
-            <ListView Grid.Column="1" Grid.Row="1"
-                      ItemsSource="{Binding ChampsToPick}"
+            <ListView ItemsSource="{Binding ChampsToPick}"
                       Background="Transparent"
                       Width="300"
                       Height="250"
                       VerticalAlignment="Top"
                       HorizontalAlignment="Center"
                       HorizontalContentAlignment="Center"
-                      Name="listaChampsPicked">
+                      Name="listaChampsPicked"
+                      Style="{StaticResource ListView_PicknBan}">
                 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -98,32 +86,18 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black" Margin="3" BorderThickness="4"
-                                CornerRadius="3" Width="200"
-                                HorizontalAlignment="Center"
-                                Background="Gray">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding name}" FontSize="20"/>
-            
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            
             </ListView>
             
-            <ListView Grid.Column="1" Grid.Row="1"
-                      ItemsSource="{Binding ChampsToBan}"
+            <ListView ItemsSource="{Binding ChampsToBan}"
                       Background="Transparent"
                       Width="300"
                       Height="250"
                       VerticalAlignment="Top"
                       HorizontalAlignment="Center"
                       HorizontalContentAlignment="Center"
-                      Margin="50"
-                      Name="listaChampsBanned">
+                      Margin="0, 50, 0 ,0"
+                      Name="listaChampsBanned"
+                      Style="{StaticResource ListView_PicknBan}">
                 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -132,20 +106,6 @@
                             CommandParameter="{Binding ElementName= listaChampsBanned ,Path=SelectedItem}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black" Margin="3" BorderThickness="4"
-                                CornerRadius="3" Width="200"
-                                HorizontalAlignment="Center"
-                                Background="Gray">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding name}" FontSize="20"/>
-            
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
             
             </ListView>
             

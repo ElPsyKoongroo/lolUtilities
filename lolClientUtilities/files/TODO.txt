@@ -2,12 +2,17 @@
 
 Alpha 0.2
 1. Actualizar la interfaz, poner estilos, etc...
+
+
+
 2. Leyenda sobre los atajos de la app.
 3. Cambiar el orden de los PicknBan
 4. Mirar actualizaciones
 5. Perfiles de PicknBan
 6. Arreglar un par de Bugs, prePick, ...
- 
+7. Mostrar Algunos detalles como en que gamemode estas, etc...
+
+
 
 
 
@@ -16,17 +21,5 @@ Alpha 0.2
 
 MAIN 1. Runas
 
-1 - Loggear un poco las cosas
-    - Log.Logger.Debug(error(si hay), "mensajito", variables(si hay))
-    - Log.Information(...)
-
-    Log.Deebug solo a fichero
-
-2 - Crear una clase que se encargue de prePick/ban/pick/pickSkin
-
-3 - El evento OnSessionEvent se tiene que asociar al evento del lol 
-        solo cuando se entre a partida y quitarse al finalizar la fase de pick/bans
-
-4 - Crear los metodos publicos para que la interfaz se pueda comunicar bien con la clase
 
 102309419 A
