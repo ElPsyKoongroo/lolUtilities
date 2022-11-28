@@ -35,35 +35,44 @@
                  UpdateSourceTrigger=PropertyChanged}"/>
         
         
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <ListView ItemsSource="{Binding Champs}"
+                      Background="Transparent"
+                      Width="300"
+                      Height="600"
+                      HorizontalAlignment="Center"
+                      HorizontalContentAlignment="Center"
+                      VerticalAlignment="Top"
+                      Name="listaChamps"
+                      Style="{StaticResource ListView_PicknBan}">
+                
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction 
+                            Command="{Binding addPickCommand}" 
+                            CommandParameter="{Binding ElementName=listaChamps, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseRightButtonUp">
+                        <i:InvokeCommandAction 
+                            Command="{Binding addBanCommand}" 
+                            CommandParameter="{Binding ElementName=listaChamps, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                    
+                    
+                </i:Interaction.Triggers>
+            </ListView>
+            
+            <Label FontSize="18" Content="Double click: pick"/>
+            <Label FontSize="18" Content="Right click: ban"/>
+            <Label FontSize="18" Content="Right click en pick/bans: eliminar"/>
+            
+        </StackPanel>
         
-        <ListView Grid.Column="0" Grid.Row="1"
-                  ItemsSource="{Binding Champs}"
-                  Background="Transparent"
-                  Width="300"
-                  Height="600"
-                  HorizontalAlignment="Center"
-                  HorizontalContentAlignment="Center"
-                  VerticalAlignment="Top"
-                  Name="listaChamps"
-                  Style="{StaticResource ListView_PicknBan}">
-            
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction 
-                        Command="{Binding addPickCommand}" 
-                        CommandParameter="{Binding ElementName=listaChamps, Path=SelectedItem}"/>
-                </i:EventTrigger>
-                <i:EventTrigger EventName="MouseRightButtonUp">
-                    <i:InvokeCommandAction 
-                        Command="{Binding addBanCommand}" 
-                        CommandParameter="{Binding ElementName=listaChamps, Path=SelectedItem}"/>
-                </i:EventTrigger>
-                
-                
-            </i:Interaction.Triggers>
-            
-            
-        </ListView>
+        <Label Grid.Row="0" Grid.Column="1" Content="PICKS"
+               FontSize="20"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Top"
+               />
         
         <StackPanel Grid.Column="1" Grid.Row="1">
             
@@ -88,6 +97,13 @@
             
             </ListView>
             
+            <Label Content="BANS"
+                   FontSize="20"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0, 10, 0, 0"
+            />
+            
             <ListView ItemsSource="{Binding ChampsToBan}"
                       Background="Transparent"
                       Width="300"
@@ -95,7 +111,6 @@
                       VerticalAlignment="Top"
                       HorizontalAlignment="Center"
                       HorizontalContentAlignment="Center"
-                      Margin="0, 50, 0 ,0"
                       Name="listaChampsBanned"
                       Style="{StaticResource ListView_PicknBan}">
                 

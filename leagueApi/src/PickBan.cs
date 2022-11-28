@@ -200,20 +200,17 @@ internal class PickBan
         if( prePickAction is null ) return;        
 
         var body = new { championId = champsToPickId[0] };
-
-        if (true)
-        {
-            TimeSpan time = League.getTimeSpanBetween(1, 2);
-            Log.Logger.Debug("Esperando {@Tiempo}", time);
-            await Task.Delay(time);
-        }
+    
+        TimeSpan time = League.getTimeSpanBetween(6, 8);
+        Log.Logger.Debug("Esperando {@Tiempo}", time);
+        await Task.Delay(time);
 
         var response = await api
-            .RequestHandler
-            .GetJsonResponseAsync(HttpMethod.Patch,
-            $"/lol-champ-select/v1/session/actions/{prePickAction.id}", 
-            Enumerable.Empty<string>(), body);
-        
+        .RequestHandler
+        .GetJsonResponseAsync(HttpMethod.Patch,
+        $"/lol-champ-select/v1/session/actions/{prePickAction.id}", 
+        Enumerable.Empty<string>(), body);
+    
         Log.Logger.Debug("PrePick de {@Champ}", champsToPickId[0]);
     }
     private async Task ban(SessionsJSON sessionData)
@@ -239,13 +236,11 @@ internal class PickBan
                 null);
 
         if(banAction is null) return;
-
-        if (true)
-        {
-            var time = League.getTimeSpanBetween(2, 3);
-            Log.Logger.Debug("Esperando {@Tiempo}", time);
-            await Task.Delay(time);
-        }
+        
+        var time = League.getTimeSpanBetween(2, 3);
+        Log.Logger.Debug("Esperando {@Tiempo}", time);
+        await Task.Delay(time);
+    
 
         foreach(var id in champsToBanId){
 
@@ -300,13 +295,10 @@ internal class PickBan
         
         Log.Logger.Debug("Pick action ID: {@ID}", pickAction.id);
         
-        
-        if (true)
-        {
-            TimeSpan time = League.getTimeSpanBetween(3, 4);
-            Log.Logger.Debug("Esperando {@Tiempo}", time);
-            await Task.Delay(time);
-        }
+        TimeSpan time = League.getTimeSpanBetween(3, 4);
+        Log.Logger.Debug("Esperando {@Tiempo}", time);
+        await Task.Delay(time);
+    
 
         foreach(var id in champsToPickId)
         {
