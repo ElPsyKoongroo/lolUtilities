@@ -1,4 +1,7 @@
-﻿using LeagueUtilities;
+﻿using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
+using LeagueUtilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -10,38 +13,45 @@ public static class Program
     
     public static async Task Main()
     {
-        //await A();
-        //await Prueba2();
-        Get_Sessions s = new();
-        await s.GetSessions();
-        Console.ReadKey();
+        /*Get_Sessions s = new();
+        await s.GetSessions();*/
+
+        LeagueClientApi api = await LeagueClientApi.ConnectAsync();
+
+
+        HttpClientHandler handler = new HttpClientHandler();
+
+        handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+        handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
+        {
+            return true;
+        };
+        
+        HttpClient client = new(handler);
+
+        HttpRequestMessage req = new HttpRequestMessage();
+        var tokenVerde = "riot:" + api.RequestHandler.Token;
+        var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokenVerde));
+
+        
+        
+        
+        req.Headers.Authorization = AuthenticationHeaderValue.Parse($"Basic {token}");
+        req.RequestUri = new Uri($"https://127.0.0.1:{api.RequestHandler.Port}/lol-game-data/assets/v1/champion-icons/1.png");
+        req.Method = HttpMethod.Get;
+        
+
+        var res = await client.SendAsync(req);
+
+        var data = await res.Content.ReadAsByteArrayAsync();
+
+        
+        await File.WriteAllBytesAsync(@"C:\Users\Adrian\Desktop\LOL\data.jpg", data);
+
+        Console.WriteLine("Terminado");
+        //Console.ReadKey();
     }
 
-
-
-    /*   private static async Task Prueba3()
-    {
-        LeagueClientApi a = await LeagueClientApi.ConnectAsync();
-    }
-*/
-    /*private static async Task Prueba1()
-    {
-        League n = new();
-        n.addBans( 35,105,11,45);
-        n.addPick(31, 517,61,555);
-
-        Console.WriteLine("Conectando");
-        await n.connect();
-        Console.WriteLine("Conectado");
-
-        Console.ReadKey();
-
-        //await n.getSelectChampion();
-
-        n.disconnect();
-
-    }*/
-    
     private static async Task Prueba2()
     {
         //n.addBans( 35,105,11,45);
@@ -100,25 +110,6 @@ public static class Program
         n.disconnect();
 
     }
-
-    /*private static async Task Pruebas()
-    {
-        var lol = (await LeagueClientApi.ConnectAsync())!;
-
-        const ulong idA = 102309419;
-        var data = await lol
-            .RequestHandler
-            .GetResponseAsync<List<Champ>>(HttpMethod.Get, 
-                $"/lol-champions/v1/inventories/{idA}/champions"
-            );
-        //data.RemoveAt(0);
-
-        //data = data.Where(x => x.ownership.owned).ToList();
-
-        var x = Newtonsoft.Json.JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
-
-        await File.WriteAllTextAsync(@"C:\Users\Adrian\Desktop\lolChampsMinimal.txt", x);
-    }*/
 }
 public class ChampsAux
 {

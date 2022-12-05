@@ -3,12 +3,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LeagueUtilities.DTO;
+using LeagueUtilities.Models;
+using lolClientUtilities.Model;
 
 namespace lolClientUtilities.ViewModel;
 
 public partial class PicknBanViewModel
 {
-    public ObservableCollection<ChampsJSON> Champs
+    public ObservableCollection<ChampWithBitmap> Champs
     {
         get => champs;
         private set { champs = value; OnPropertyChange(); }
@@ -21,8 +23,8 @@ public partial class PicknBanViewModel
         set { randomSkinChecked = value; OnPropertyChange(); league.hasToPickSkin = value; }
     }
 
-    public ObservableCollection<ChampsJSON> ChampsToBan { get => champsToBan; }
-    public ObservableCollection<ChampsJSON> ChampsToPick { get => champsToPick; }
+    public ObservableCollection<ChampWithBitmap> ChampsToBan { get => champsToBan; }
+    public ObservableCollection<ChampWithBitmap> ChampsToPick { get => champsToPick; }
     
     public string Filter
     {

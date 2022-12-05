@@ -9,42 +9,34 @@
             <Setter.Value>
                 <DataTemplate>
                     <Border BorderBrush="Black" Margin="3" BorderThickness="4"
-                            CornerRadius="3" Width="200"
+                            CornerRadius="3" Width="250" Height="50"
                             HorizontalAlignment="Center"
-                            Background="Gray"
+                            Background="#4A688B"
                             Name="borde">
                         
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Image Source="{Binding image}" Width="40" Height="40" 
+                                   VerticalAlignment="Center"
+                                   Margin="20, 0, 20, 0">
+                                  <Image.Clip>
+                                        <EllipseGeometry Center="20,20" RadiusX="20" RadiusY="20"/>
+                                  </Image.Clip>
+                              </Image>
+                            
                             <TextBlock Text="{Binding name}" FontSize="20"
-                                       Foreground="Black"/>
+                                       Foreground="White"
+                                       VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
                     <DataTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="Blue" TargetName="borde"/>
+                            <Setter Property="Background" Value="#2BA0C4" TargetName="borde"/>
                         </Trigger>                        
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <!---
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ListView">
-                    <Border BorderBrush="Black" BorderThickness="4"
-                            CornerRadius="3"
-                            HorizontalAlignment="Center"
-                            Background="Transparent"
-                            VerticalAlignment="Top"
-                            >
-                        <ScrollViewer>
-                            <ItemsPresenter/>
-                        </ScrollViewer>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        -->
+    
     </Style>
     
 </ResourceDictionary>

@@ -20,11 +20,26 @@ public partial class League
         hasToAutoAccept = false;
         IsConnected = false;
         initialized = false;
+        
+        handler = new HttpClientHandler();
+        
+        handler.ClientCertificateOptions = ClientCertificateOption.Manual;
+        handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true;
+
+        client = new HttpClient(handler);
     }
 
     public static League GetLeague()
     {
         return _league ??= new League();
+    }
+
+    public static void Dispose()
+    {
+        if (_league is null) return;
+        
+        _league.client.Dispose();
+        _league.handler.Dispose();
     }
 
     public void addBans(params int[] championsId){

@@ -32,6 +32,10 @@ public partial class League{
     public EventHandler ClientConnected;
     private PHASES _phase;
     private bool initialized;
+
+    private HttpClientHandler handler;
+
+    private HttpClient client;
     //Temporal
     public bool hasToPick { get; set; }
     public bool hasToPickSkin { get; set; }

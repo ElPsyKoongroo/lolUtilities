@@ -33,6 +33,7 @@ public partial class MainWindow : Window
 
     private void CloseButton_OnClick(object sender, RoutedEventArgs e)
     {
+        LeagueUtilities.League.Dispose();
         Application.Current.Shutdown();
     }
     private void MinimizeButton_OnClick(object sender, RoutedEventArgs e){
