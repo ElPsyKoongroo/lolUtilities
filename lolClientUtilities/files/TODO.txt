@@ -1,25 +1,39 @@
 
 
 Alpha 0.2
-1. Actualizar la interfaz, poner estilos, etc...
-
-
-
+1. Actualizar la interfaz, poner estilos, etc...{
+    -Iconos Campeones
+    -Estilo Botones
+}
 2. Leyenda sobre los atajos de la app.
 3. Cambiar el orden de los PicknBan
-4. Mirar actualizaciones
+
+
+Alpha 0.3
 5. Perfiles de PicknBan
 6. Arreglar un par de Bugs, prePick, ...
+
+Alpha 0.4
+4. Mirar actualizaciones
 7. Mostrar Algunos detalles como en que gamemode estas, etc...
 
 
+Alpha 0.5
+5. Instalador
 
+Alpha 0.6 - PostGame Update
+9. Mostra PostGame stats
 
+Alpha 0.7 - Runas
+8. Set Runas
 
+Beta
+-Runas
+-Pocos Bugs
+-App casi completada
 
+Version 1.0
 
-
-MAIN 1. Runas
 
 
 102309419 A

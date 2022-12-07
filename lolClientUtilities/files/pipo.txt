@@ -5,7 +5,7 @@
 |                                                               |
 |        AutoAccept ▢           Preferable Pick-Ban ▢           |
 |                                                               |
-|        RuneSelect |     v|  ⚙️                                L
+|        RuneSelect |     v| ⚙️                                 L
 |                                                               |
 |                               ShowImportantStats ▢            |
 |                                                               |

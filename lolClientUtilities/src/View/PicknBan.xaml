@@ -133,7 +133,8 @@
                         <ScaleTransform ScaleX="1.75" ScaleY="1.75" />
                     </CheckBox.LayoutTransform>
                 </CheckBox>
-                <Button Content="Guardar" Height="25" Width="100" 
+                <Button Content="Guardar" Height="25" Width="100" FontSize="14"
+                        Style="{StaticResource NormalButton}"
                         Margin="50, 0 ,0 ,0"
                         Command="{Binding SaveCommand}"/>
             </StackPanel>

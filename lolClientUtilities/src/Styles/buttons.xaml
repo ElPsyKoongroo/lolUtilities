@@ -80,4 +80,44 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <Style TargetType="Button" x:Key="NormalButton" >
+                <Style.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="8"></Setter>
+                    </Style>
+                </Style.Resources>
+                
+                <Setter Property="Cursor" Value="Hand"></Setter>
+                <Setter Property="MinHeight" Value="24"></Setter>
+                <Setter Property="Width" Value="196"></Setter>
+                <Setter Property="Height" Value="62"></Setter>
+                <Setter Property="BorderThickness" Value="0"></Setter>
+                <Setter Property="MinWidth" Value="50"></Setter>
+                <Setter Property="FontSize" Value="20"></Setter>
+                <Setter Property="FontFamily" Value="Phantomsans, sans-serif"></Setter>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="Background" >
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                            <LinearGradientBrush.RelativeTransform>
+                                <TransformGroup>
+                                    <RotateTransform CenterY="0.5" CenterX="0.5" Angle="119"></RotateTransform>
+                                    
+                                </TransformGroup>
+                            </LinearGradientBrush.RelativeTransform>
+                            <LinearGradientBrush.GradientStops>
+                                <GradientStopCollection>
+                                    <GradientStop Color="#AF40FF" Offset="0.0"/>
+                                    <GradientStop Color="#5B42F3" Offset="0.5"/>
+                                    <GradientStop Color="#1FA7ED" Offset="1.0"/>
+                                </GradientStopCollection>
+                            </LinearGradientBrush.GradientStops>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                
+            </Style>
 </ResourceDictionary>

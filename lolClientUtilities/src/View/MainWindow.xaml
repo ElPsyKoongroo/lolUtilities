@@ -113,7 +113,8 @@
                                 HorizontalAlignment="Center">
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                            <Button HorizontalAlignment="Stretch" 
+                            <Button HorizontalAlignment="Stretch"
+                                    Style="{StaticResource NormalButton}"
                                     Content="Conectar"
                                     Command="{Binding ConnectCommand}"/>
                         </StackPanel>
