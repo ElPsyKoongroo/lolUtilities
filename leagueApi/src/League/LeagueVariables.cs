@@ -32,6 +32,7 @@ public partial class League{
     public EventHandler ClientConnected;
     private PHASES _phase;
     private bool initialized;
+    private string orderToPick;
 
     private HttpClientHandler handler;
 

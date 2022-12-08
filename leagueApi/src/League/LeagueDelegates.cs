@@ -50,7 +50,7 @@ public partial class League{
                 phase = PHASES.CHAMPSELECT;
                 await Task.Delay(TimeSpan.FromMilliseconds(5));
                 PickBan.New(api, SummonerId, hasToPick, hasToPickSkin);
-                PickBan.SetPicks(champsToBanId,champsToPickId);
+                PickBan.SetPicks(champsToBanId,champsToPickId, orderToPick);
                 
                 await PickBan.Start();
                 

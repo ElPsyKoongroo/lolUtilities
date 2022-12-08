@@ -70,39 +70,39 @@
         
         <Label Grid.Row="0" Grid.Column="1" Content="PICKS"
                FontSize="20"
-               HorizontalAlignment="Center"
+               Margin="160,0,0,0"
+               HorizontalAlignment="Left"
                VerticalAlignment="Top"
                />
-        
-        <StackPanel Grid.Column="1" Grid.Row="1">
-            
-        
-            <ListView ItemsSource="{Binding ChampsToPick}"
-                      Background="Transparent"
-                      Width="300"
-                      Height="250"
-                      VerticalAlignment="Top"
-                      HorizontalAlignment="Center"
-                      HorizontalContentAlignment="Center"
-                      Name="listaChampsPicked"
-                      Style="{StaticResource ListView_PicknBan}">
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+            <StackPanel>
                 
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction
-                            Command="{Binding remPickCommand}" 
-                            CommandParameter="{Binding ElementName= listaChampsPicked ,Path=SelectedItem}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            
-            </ListView>
-            
+                <ListView ItemsSource="{Binding ChampsToPick}"
+                          Background="Transparent"
+                          Width="300"
+                          Height="250"
+                          VerticalAlignment="Top"
+                          HorizontalAlignment="Center"
+                          HorizontalContentAlignment="Center"
+                          Name="listaChampsPicked"
+                          Style="{StaticResource ListView_PicknBan}">
+                    
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction
+                                Command="{Binding remPickCommand}" 
+                                CommandParameter="{Binding ElementName= listaChampsPicked ,Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                
+                </ListView>
+                
+
             <Label Content="BANS"
                    FontSize="20"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Margin="0, 10, 0, 0"
-            />
+                   Margin="0, 10, 0, 0"/>
             
             <ListView ItemsSource="{Binding ChampsToBan}"
                       Background="Transparent"
@@ -138,6 +138,22 @@
                         Margin="50, 0 ,0 ,0"
                         Command="{Binding SaveCommand}"/>
             </StackPanel>
+            
+            </StackPanel>
+            
+            <StackPanel Orientation="Vertical">
+                
+                <ComboBox x:Name="chooseComboBox" 
+                          VerticalAlignment="Top" HorizontalAlignment="Left"
+                          Width="80" Height="20"
+                          Margin="-25,0,0,0"
+                          Text="{Binding OrderComboBox}"
+                >
+                    <ComboBoxItem Content="In Order" IsSelected="True"/> 
+                    <ComboBoxItem Content="Random" />
+                </ComboBox>
+            </StackPanel>
+            
         </StackPanel>
         
     </Grid>

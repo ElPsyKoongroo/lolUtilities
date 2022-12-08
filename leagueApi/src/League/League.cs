@@ -20,6 +20,7 @@ public partial class League
         hasToAutoAccept = false;
         IsConnected = false;
         initialized = false;
+        orderToPick = "In Order";
         
         handler = new HttpClientHandler();
         
@@ -51,10 +52,11 @@ public partial class League
         Array.ForEach(championsId, x=> champsToPickId.Add(x));
     }
     
-    public void SetPicks(List<int> bans, List<int> picks)
+    public void SetPicks(List<int> bans, List<int> picks, string order)
     {
         champsToBanId = bans;
         champsToPickId = picks;
+        orderToPick = order;
     }
 
     private void setEvents(){

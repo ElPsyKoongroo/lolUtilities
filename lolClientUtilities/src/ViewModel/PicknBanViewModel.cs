@@ -183,7 +183,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         List<int> picks = new();
         ChampsToBan.ToList().ForEach(ban => bans.Add(ban.id));
         ChampsToPick.ToList().ForEach(pick => picks.Add(pick.id));
-        league.SetPicks(bans, picks);
+        league.SetPicks(bans, picks, OrderComboBox);
         Debug.WriteLine("Fasilito");
     }
 }

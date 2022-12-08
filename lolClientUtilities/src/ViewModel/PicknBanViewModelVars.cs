@@ -1,15 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using LeagueUtilities.DTO;
 using LeagueUtilities.Models;
 using lolClientUtilities.Model;
+using Microsoft.VisualBasic.Logging;
 
 namespace lolClientUtilities.ViewModel;
 
 public partial class PicknBanViewModel
 {
+    private string orderComboBox = "";
+    public string OrderComboBox
+    {
+        get => orderComboBox;
+        set { orderComboBox = value; OnPropertyChange(); }
+    }
+    
     public ObservableCollection<ChampWithBitmap> Champs
     {
         get => champs;

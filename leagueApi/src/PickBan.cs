@@ -22,6 +22,8 @@ internal class PickBan
     private int PickPosition;
     private int BanPosition;
 
+    private string orderToPick;
+
     private PickBan(LeagueClientApi api, long SummonerId, bool pick, bool skin){
         this.api = api;
         this.SummonerId = SummonerId;
@@ -46,6 +48,7 @@ internal class PickBan
         BanPosition = -1;
 
         finished = false;
+        orderToPick = "In Order";
     }
     public static void New(LeagueClientApi api, long SummonerId, bool pick = false, bool skin = false)
     {
@@ -177,12 +180,27 @@ internal class PickBan
             Log.Logger.Debug(e, "ERROR:");
         }
     }
-    public static void SetPicks(List<int> bans, List<int> picks){
+    public static void SetPicks(List<int> bans, List<int> picks,string order){
         _pickBan!.champsToBanId = bans;
         _pickBan.champsToPickId = picks;
+        _pickBan.orderToPick = order;
+        switch (_pickBan.orderToPick)
+        {
+            case "Random":
+            {
+                Random rand = new Random();
+                _pickBan.champsToPickId = _pickBan.champsToPickId.OrderBy(c => rand.Next()).ToList();
+                break;
+            }
+            case "In Order":
+            {
+                break;
+            }
+        }
     }
     private async Task prePick(SessionsJSON sessionData)
     {
+        
         var champsToPick = champsToPickId.Count;
         Log.Logger.Debug("Champs to PrePick: {@PrePicks}", champsToPick);
         
