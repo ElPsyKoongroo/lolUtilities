@@ -219,7 +219,7 @@ internal class PickBan
 
         var body = new { championId = champsToPickId[0] };
     
-        TimeSpan time = League.getTimeSpanBetween(6, 8);
+        TimeSpan time = League.getTimeSpanBetween(9, 10);
         Log.Logger.Debug("Esperando {@Tiempo}", time);
         await Task.Delay(time);
 

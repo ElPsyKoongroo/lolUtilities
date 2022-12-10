@@ -74,9 +74,9 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         if (filter == "") return new ObservableCollection<ChampWithBitmap>(allChamps);
         var aux = filter.ToLower();
 
-        var champsAux = allChamps.Where(champ => champ.name.ToLower().StartsWith(filter));
+        var champsAux = allChamps.Where(champ => champ.name.ToLower().StartsWith(aux));
         champsAux = champsAux.Concat(allChamps.Where(champ =>
-            !champ.name.ToLower().StartsWith(filter) && champ.name.ToLower().Contains(filter)));
+            !champ.name.ToLower().StartsWith(aux) && champ.name.ToLower().Contains(aux)));
 
         return new ObservableCollection<ChampWithBitmap>(champsAux);
     }

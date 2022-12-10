@@ -1,4 +1,4 @@
-
+Alpha 0.1 Released
 
 Alpha 0.2
 1. Actualizar la interfaz, poner estilos, etc...{
@@ -8,31 +8,43 @@ Alpha 0.2
 2. Leyenda sobre los atajos de la app.
 3. Cambiar el orden de los PicknBan
 
-
 Alpha 0.3
-5. Perfiles de PicknBan
-6. Arreglar un par de Bugs, prePick, ...
+1.Filtrar por Roles
+2.Poder salir del PickBan al desactivarlo, o cambiar los campeones al pickear antes de hacerlo
+3.Filtreo como el del LOL.
+Jerarquia de Filtreo{
+    -Empieza por
+    -Contienen las letras da igual en que orden{
+        -Empieza por la primera letra indicada
+        -Cualquiera
+    }
+}
 
 Alpha 0.4
-4. Mirar actualizaciones
+5. Perfiles de PicknBan
 7. Mostrar Algunos detalles como en que gamemode estas, etc...
 
-
 Alpha 0.5
+4. Mirar actualizaciones
+6. Arreglar un par de Bugs, prePick, ...
+
+Alpha 0.6
 5. Instalador
 
-Alpha 0.6 - PostGame Update
-9. Mostra PostGame stats
+Alpha 0.7 - PostGame Update
+9. Mostrar PostGame stats
 
-Alpha 0.7 - Runas
+Beta 0.8 - Runas
 8. Set Runas
 
-Beta
--Runas
--Pocos Bugs
--App casi completada
+Beta 0.9 
+1.Refactorization and Performance 
+2.Hacer que no explote nunca. ( A prueba de bobos )
 
 Version 1.0
+
+
+
 
 
 
