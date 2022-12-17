@@ -139,6 +139,17 @@
                         Command="{Binding SaveCommand}"/>
             </StackPanel>
             
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" 
+                        Margin="93,0,0,0" >
+                <Label Content="Insta Pick" VerticalAlignment="Center"/>
+                <CheckBox VerticalAlignment="Center"
+                          IsChecked="{Binding InstaPickChecked}">
+                    <CheckBox.LayoutTransform>
+                        <ScaleTransform ScaleX="1.75" ScaleY="1.75" />
+                    </CheckBox.LayoutTransform>
+                </CheckBox>
+            </StackPanel>
+            
             </StackPanel>
             
             <StackPanel Orientation="Vertical">
@@ -152,6 +163,7 @@
                     <ComboBoxItem Content="In Order" IsSelected="True"/> 
                     <ComboBoxItem Content="Random" />
                 </ComboBox>
+                
             </StackPanel>
             
         </StackPanel>

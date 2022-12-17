@@ -32,9 +32,15 @@ public partial class PicknBanViewModel
     public bool RandomSkinChecked
     {
         get => randomSkinChecked;
-        set { randomSkinChecked = value; OnPropertyChange(); league.hasToPickSkin = value; }
+        set { randomSkinChecked = value; OnPropertyChange(); league.HasToPickSkin = value; }
     }
-
+    
+    private bool instaPickChecked = false;
+    public bool InstaPickChecked
+    {
+        get => instaPickChecked;
+        set { instaPickChecked = value; OnPropertyChange(); league.HasToInstaPick = value; }
+    }
     public ObservableCollection<ChampWithBitmap> ChampsToBan { get => champsToBan; }
     public ObservableCollection<ChampWithBitmap> ChampsToPick { get => champsToPick; }
     

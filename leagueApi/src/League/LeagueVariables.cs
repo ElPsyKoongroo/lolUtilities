@@ -38,9 +38,45 @@ public partial class League{
 
     private HttpClient client;
     //Temporal
-    public bool hasToPick { get; set; }
-    public bool hasToPickSkin { get; set; }
-    public bool hasToAutoAccept { get; set; }
+    private bool hasToPick;
+    private bool hasToPickSkin;
+    private bool hasToInstaPick;
+    private bool hasToAutoAccept;
+    public bool HasToPick
+    {
+        get => hasToPick;
+        set
+        {
+            hasToPick = value;
+            PickBan.ChangeProperty("HasToPicknBan", value);
+        }
+    }
+
+    public bool HasToPickSkin
+    {
+        get => hasToPickSkin;
+        set
+        {
+            hasToPickSkin = value;
+            PickBan.ChangeProperty("HasToPickRandomSkin", value);
+        }
+    }
+
+    public bool HasToInstaPick
+    {
+        get => hasToInstaPick;
+        set
+        {
+            hasToInstaPick = value;
+            PickBan.ChangeProperty("HasToInstaPick", value);
+        }
+    }
+
+    public bool HasToAutoAccept
+    {
+        get => hasToAutoAccept;
+        set => hasToAutoAccept = value;
+    }
 
     private PHASES phase
     {

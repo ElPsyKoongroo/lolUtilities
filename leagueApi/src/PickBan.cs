@@ -16,6 +16,7 @@ internal class PickBan
     private bool hasBanned;
     private bool hasPrepicked;
     private bool hasPicked;
+    private bool HasToInstaPick;
     private bool HasToPickRandomSkin {get; set;}
     private bool hasPickSkin;
     private bool finished;
@@ -24,7 +25,7 @@ internal class PickBan
 
     private string orderToPick;
 
-    private PickBan(LeagueClientApi api, long SummonerId, bool pick, bool skin){
+    private PickBan(LeagueClientApi api, long SummonerId, bool pick, bool skin, bool instaPick){
         this.api = api;
         this.SummonerId = SummonerId;
 
@@ -37,6 +38,7 @@ internal class PickBan
         
         HasToPicknBan = pick;
         HasToPickRandomSkin = skin;
+        HasToInstaPick = instaPick;
 
         champsToBanId = new List<int>();
         champsToPickId = new List<int>();
@@ -50,15 +52,16 @@ internal class PickBan
         finished = false;
         orderToPick = "In Order";
     }
-    public static void New(LeagueClientApi api, long SummonerId, bool pick = false, bool skin = false)
+    public static void New(LeagueClientApi api, long SummonerId, bool pick = false, bool skin = false, bool instaPick = false)
     {
         Finish();
-        _pickBan = new PickBan(api, SummonerId, pick, skin);
+        _pickBan = new PickBan(api, SummonerId, pick, skin, instaPick);
         Log.Logger.Debug(
             "Creado nuevo objeto PicknBan:\n" +
             "\tPick: {@Pick}\n" +
+            "\tInstaPick: {@InstaPick}\n" +
             "\tSkin: {@Skin}",
-            pick, skin);
+            pick, instaPick, skin);
     }
     public static async Task Start()
     {
@@ -77,6 +80,65 @@ internal class PickBan
         _pickBan.api.EventHandler.Subscribe("/lol-champ-select/v1/session", OnSessionEvent);
         
         await _pickBan.PicknBan(data);
+    }
+
+    public static void ChangeProperty(string propName, object value)
+    {
+        if (_pickBan is null || _pickBan.finished) return;
+        Debug.WriteLine("Changing " + propName);
+        switch (propName)
+        {
+            case "HasToPicknBan":
+            {
+                bool propValue = (bool)value;
+
+                _pickBan.HasToPicknBan = propValue;
+                break;
+            }
+                
+            case "HasToPickRandomSkin":
+            {
+                bool propValue = (bool)value;
+
+                _pickBan.HasToPickRandomSkin = propValue;
+                break;
+            }
+            
+            case "BanList":
+            {
+                var propValue = (List<int>)value;
+
+                _pickBan.champsToBanId = propValue;
+                break;
+            }
+            
+            case "PickList":
+            {
+                var propValue = (List<int>)value;
+
+                _pickBan.champsToPickId = propValue;
+                break;
+            }
+
+            case "HasToInstaPick":
+            {
+                bool propValue = (bool)value;
+
+                _pickBan.HasToInstaPick = propValue;
+                break;
+            }
+            
+            default:
+            {
+                Debug.WriteLine("Cagaste si has entrado aqui");
+                break;
+            }
+        }
+    }
+
+    public static bool IsConnected()
+    {
+        return !(_pickBan is null || _pickBan.finished);
     }
     private void SearchIndex(SessionsJSON data)
     {
@@ -102,7 +164,7 @@ internal class PickBan
     }
     public static void Finish()
     {
-        if (_pickBan is null || _pickBan.finished) return;
+        if (!IsConnected()) return;
         
         _pickBan.finished = true;
         _pickBan.api.EventHandler.Unsubscribe("/lol-champ-select/v1/session");
@@ -313,9 +375,13 @@ internal class PickBan
         
         Log.Logger.Debug("Pick action ID: {@ID}", pickAction.id);
         
-        TimeSpan time = League.getTimeSpanBetween(3, 4);
-        Log.Logger.Debug("Esperando {@Tiempo}", time);
-        await Task.Delay(time);
+        if (!HasToInstaPick)
+        {
+            TimeSpan time = League.getTimeSpanBetween(3, 4);
+            Log.Logger.Debug("Esperando {@Tiempo}", time);
+            await Task.Delay(time);
+        }
+        else Log.Logger.Debug("Instapickeando");
     
 
         foreach(var id in champsToPickId)

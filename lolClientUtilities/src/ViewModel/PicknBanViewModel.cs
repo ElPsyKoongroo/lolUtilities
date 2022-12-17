@@ -90,24 +90,28 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
     private void addPick(ChampWithBitmap champ)
     {
         ChampsToPick.Add(champ);
+        league.ModifyPicks(champsToPick.Select(x=> x.id).ToList());
     }
 
     [RelayCommand]
     private void remPick(ChampWithBitmap champ)
     {
         ChampsToPick.Remove(champ);
+        league.ModifyPicks(champsToPick.Select(x=> x.id).ToList());
     }
 
     [RelayCommand]
     private void addBan(ChampWithBitmap champ)
     {
         ChampsToBan.Add(champ);
+        league.ModifyBans(champsToBan.Select(x=> x.id).ToList());
     }
 
     [RelayCommand]
     private void remBan(ChampWithBitmap champ)
     {
         ChampsToBan.Remove(champ);
+        league.ModifyBans(champsToBan.Select(x=> x.id).ToList());
     }
 
     [RelayCommand]
@@ -183,7 +187,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         List<int> picks = new();
         ChampsToBan.ToList().ForEach(ban => bans.Add(ban.id));
         ChampsToPick.ToList().ForEach(pick => picks.Add(pick.id));
-        league.SetPicks(bans, picks, OrderComboBox);
+        league.SetPicksnBans(bans, picks, OrderComboBox);
         Debug.WriteLine("Fasilito");
     }
 }

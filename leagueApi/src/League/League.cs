@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Reflection.Metadata;
 
 namespace LeagueUtilities;
@@ -52,11 +53,25 @@ public partial class League
         Array.ForEach(championsId, x=> champsToPickId.Add(x));
     }
     
-    public void SetPicks(List<int> bans, List<int> picks, string order)
+    public void SetPicksnBans(List<int> bans, List<int> picks, string order)
     {
         champsToBanId = bans;
         champsToPickId = picks;
         orderToPick = order;
+    }
+    
+    public void ModifyBans(List<int> bans)
+    {
+        Debug.WriteLine("Cambiando bans");
+        champsToBanId = bans;
+        PickBan.ChangeProperty("BanList", bans);
+    }
+    
+    public void ModifyPicks(List<int> picks)
+    {
+        Debug.WriteLine("Cambiando picks");
+        champsToPickId = picks;
+        PickBan.ChangeProperty("PickList", picks);
     }
 
     private void setEvents(){

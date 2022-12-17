@@ -31,14 +31,14 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
     public bool AutoAccept
     {
         get => autoAccept;
-        set { autoAccept = value; OnPropertyChange(); _client.hasToAutoAccept = value; }
+        set { autoAccept = value; OnPropertyChange(); _client.HasToAutoAccept = value; }
     }
 
     private bool picknBan;
     public bool PicknBan
     { 
         get => picknBan;
-        set { picknBan = value; OnPropertyChange(); _client.hasToPick = value; }
+        set { picknBan = value; OnPropertyChange(); _client.HasToPick = value; }
     }
     private UserControl actualPage;
     public UserControl ActualPage
@@ -66,8 +66,8 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
         if (!_client.IsConnected)
         {
             await _client.connect();
-            _client.hasToPick = picknBan;
-            _client.hasToAutoAccept = autoAccept;
+            _client.HasToPick = picknBan;
+            _client.HasToAutoAccept = autoAccept;
         }
     }
 
