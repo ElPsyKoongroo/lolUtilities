@@ -16,7 +16,7 @@ public partial class League{
                 phase = PHASES.NONE;
                 break;
             }
-            case "Lobby":
+            case "Lobby": //Lobby
             {
                 phase = PHASES.LOBBY;
                 PickBan.Finish();
@@ -35,7 +35,7 @@ public partial class League{
                 await acceptGame();
                 break;
             }
-            case "ChampSelect":
+            case "ChampSelect": 
             {
                 phase = PHASES.CHAMPSELECT;
                 await Task.Delay(TimeSpan.FromMilliseconds(5));
@@ -52,6 +52,16 @@ public partial class League{
                 PickBan.Finish();
                 break;
             }
+            case "WaitingForStats":
+            {
+                phase = PHASES.WAITINGFORSTATS;
+                break;
+            }
+            case "EndOfGame":
+            {
+                phase = PHASES.ENDOFGAME;
+                break;
+            }
         }
     }
 
@@ -63,14 +73,3 @@ public partial class League{
     }
 
 }
-
-/*
-  ReadyCheck -> Aceptar partida
-  None -> Entrar al lol. Sin estar en el lobby.
-  Lobby -> Estás en lobby.
-  Matchmaking -> En queue.
-  ChampSelect -> self explanatory.
-  InProgress -> entrando en partida/ en partida.
-  WaitingForStats -> stats.
-  EndOfGame -> stats
-*/

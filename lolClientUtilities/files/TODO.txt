@@ -12,13 +12,7 @@ Alpha 0.3
 1.Filtrar por Roles
 2.Poder salir del PickBan al desactivarlo, o cambiar los campeones al pickear antes de hacerlo
 3.Filtreo como el del LOL.
-Jerarquia de Filtreo{
-    -Empieza por
-    -Contienen las letras da igual en que orden{
-        -Empieza por la primera letra indicada
-        -Cualquiera
-    }
-}
+10.Insta Pick
 
 Alpha 0.4
 5. Perfiles de PicknBan

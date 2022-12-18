@@ -2,6 +2,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using LeagueUtilities.DTO;
 using LeagueUtilities.Models;
+using System.Collections.Generic;
 
 namespace lolClientUtilities.Model;
 
@@ -11,6 +12,7 @@ public class ChampWithBitmap
     public string alias { get; set; }
     public string name { get; set; }
     public string squarePortraitPath { get; set; }
+    public List<string> roles { get; set; }
     public BitmapImage image { get; set; }
 
     public ChampWithBitmap(ChampsJSON champ, byte[] img)
@@ -18,6 +20,7 @@ public class ChampWithBitmap
         id = champ.id;
         alias = champ.alias;
         name = champ.name;
+        roles = champ.roles;
         image = LoadImage(img);
     }
     
@@ -26,6 +29,7 @@ public class ChampWithBitmap
         id = champ.id;
         alias = champ.alias;
         name = champ.name;
+        roles = champ.roles;
         image = LoadImage(champ.image);
     }
     public ChampWithBitmap(ChampWithBitmap champ, BitmapImage img)
@@ -33,6 +37,7 @@ public class ChampWithBitmap
         id = champ.id;
         alias = champ.alias;
         name = champ.name;
+        roles = champ.roles;
         image = img;
     }
 
@@ -43,6 +48,7 @@ public class ChampWithBitmap
             alias = alias,
             name = name,
             id = id,
+            roles  = roles,
             squarePortraitPath = squarePortraitPath
         };
     }

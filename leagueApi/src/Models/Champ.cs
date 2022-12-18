@@ -10,6 +10,7 @@ public class Champ
     public string alias { get; set; }
     public string name { get; set; }
     public string squarePortraitPath { get; set; }
+    public List<string> roles { get; set; }
     public byte[] image { get; set; }
 
     public Champ(ChampsJSON champ, byte[] img)
@@ -18,6 +19,7 @@ public class Champ
         alias = champ.alias;
         name = champ.name;
         image = img;
+        roles = champ.roles;
     }
 
     public ChampsJSON AsChampJSON()
@@ -27,6 +29,7 @@ public class Champ
             alias = alias,
             name = name,
             id = id,
+            roles = roles,
             squarePortraitPath = squarePortraitPath
         };
     }
