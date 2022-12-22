@@ -8,7 +8,13 @@ public partial class League{
         if(api is null) return;
 
         var msg = e.Data.ToString();
+        
+        OnGameFlowEvent(msg);
+    }
 
+    private async Task OnGameFlowEvent(string msg)
+    {
+        Debug.WriteLine(msg);
         switch(msg)
         {
             case "None":
@@ -41,7 +47,6 @@ public partial class League{
                 await Task.Delay(TimeSpan.FromMilliseconds(5));
                 PickBan.New(api, SummonerId, hasToPick, hasToPickSkin, hasToInstaPick);
                 PickBan.SetPicks(champsToBanId,champsToPickId, orderToPick);
-                
                 await PickBan.Start();
                 
                 break;

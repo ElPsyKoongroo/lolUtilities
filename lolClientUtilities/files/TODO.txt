@@ -44,5 +44,6 @@ Version 1.0
 
 
 
+Lista de Bugs:
 
-102309419 A
+-Al pulsar en el recuadro de los campeones sin que haya ninguno, explota. Esto es debido a que como no hay ningun campeon no puede pasar ni uno a las listas.

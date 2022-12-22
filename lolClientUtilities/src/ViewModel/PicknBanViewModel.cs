@@ -150,6 +150,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         champsToPick =
             new ObservableCollection<ChampWithBitmap>(dataDeserialized.picks.Select(x => new ChampWithBitmap(x, null)));
         
+        
     }
 
     private async void connect(object? sender, EventArgs e)
@@ -179,7 +180,9 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         OnPropertyChange(nameof(champsToBan));
         OnPropertyChange(nameof(champsToPick));
         
-        league.SetPicksnBans(champsToBan.ToList().Select(x=>x.id).ToList(),champsToPick.Select(x=>x.id).ToList(),orderComboBox);
+        league.SetPicksnBans(champsToBan.ToList().Select(x=>x.id).ToList(),
+                        champsToPick.Select(x=>x.id).ToList(),
+                            orderComboBox);
         
     }
 

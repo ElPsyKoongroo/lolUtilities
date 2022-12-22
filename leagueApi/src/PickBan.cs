@@ -63,7 +63,7 @@ internal class PickBan
             "\tSkin: {@Skin}",
             pick, instaPick, skin);
     }
-    public static async Task Start()
+    public static async Task Start(bool reconnect=false)
     {
         var data = await _pickBan!.api
             .RequestHandler
@@ -76,8 +76,8 @@ internal class PickBan
         Log.Logger.Debug("ActorCellID: {@ActorCellID}", _pickBan.ActorCellID);
 
         _pickBan.SearchIndex(data);
-
-        _pickBan.api.EventHandler.Subscribe("/lol-champ-select/v1/session", OnSessionEvent);
+        if(!reconnect)
+            _pickBan.api.EventHandler.Subscribe("/lol-champ-select/v1/session", OnSessionEvent);
         
         await _pickBan.PicknBan(data);
     }
@@ -93,6 +93,11 @@ internal class PickBan
                 bool propValue = (bool)value;
 
                 _pickBan.HasToPicknBan = propValue;
+
+                if (propValue)
+                {
+                    Start(true);
+                }
                 break;
             }
                 
@@ -135,7 +140,7 @@ internal class PickBan
             }
         }
     }
-
+    
     public static bool IsConnected()
     {
         return !(_pickBan is null || _pickBan.finished);

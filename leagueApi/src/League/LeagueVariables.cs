@@ -86,7 +86,7 @@ public partial class League{
             _phase = value;
             if (_phase == PHASES.CHAMPSELECT)
             {
-                onChampSelect();
+                //onChampSelect();
             }
         }
     }

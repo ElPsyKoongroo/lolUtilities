@@ -38,7 +38,12 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
     public bool PicknBan
     { 
         get => picknBan;
-        set { picknBan = value; OnPropertyChange(); _client.HasToPick = value; }
+        set
+        {
+            picknBan = value; 
+            OnPropertyChange(); 
+            _client.HasToPick = value;
+        }
     }
     private UserControl actualPage;
     public UserControl ActualPage

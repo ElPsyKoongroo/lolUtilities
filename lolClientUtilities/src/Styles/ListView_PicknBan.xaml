@@ -2,9 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
     <Style TargetType="ListView" x:Key="ListView_PicknBan">
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="8"/>
+            </Style>
+        </Style.Resources>
         <Setter Property="FontSize" Value="26"/>
         <Setter Property="FontFamily" Value="Helvetica"/>
-        
+        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="BorderBrush" Value="#227C70"/>
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>

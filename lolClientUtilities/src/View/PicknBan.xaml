@@ -45,7 +45,7 @@
                       VerticalAlignment="Top"
                       Name="listaChamps"
                       Style="{StaticResource ListView_PicknBan}">
-                
+                                        
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction 
@@ -156,12 +156,22 @@
                 
                 <ComboBox x:Name="chooseComboBox" 
                           VerticalAlignment="Top" HorizontalAlignment="Left"
-                          Width="80" Height="20"
+                          Width="140" Height="20"
                           Margin="-25,0,0,0"
+                          Foreground="Black"
                           Text="{Binding OrderComboBox}"
+                          HorizontalContentAlignment="Center"
+                          BorderThickness="0"
                 >
+                    <ComboBox.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#227C70" Offset="0"/>
+                            <GradientStop Color="#106070" Offset="1"/>
+                        </LinearGradientBrush>
+                    </ComboBox.Background>
                     <ComboBoxItem Content="In Order" IsSelected="True"/> 
                     <ComboBoxItem Content="Random" />
+                    
                 </ComboBox>
                 
             </StackPanel>
