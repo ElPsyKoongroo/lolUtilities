@@ -9,14 +9,13 @@ Alpha 0.2
 3. Cambiar el orden de los PicknBan
 
 Alpha 0.3
-1.Filtrar por Roles
+12. Actualizar tema de las comboBoxes.
 2.Poder salir del PickBan al desactivarlo, o cambiar los campeones al pickear antes de hacerlo
-3.Filtreo como el del LOL.
 10.Insta Pick
 
 Alpha 0.4
-5. Perfiles de PicknBan
 7. Mostrar Algunos detalles como en que gamemode estas, etc...
+5. Perfiles de PicknBan
 
 Alpha 0.5
 4. Mirar actualizaciones
@@ -27,6 +26,7 @@ Alpha 0.6
 
 Alpha 0.7 - PostGame Update
 9. Mostrar PostGame stats
+11.Notificar cuando en la tienda haya una skin de un campeon favorito en rebajas.
 
 Beta 0.8 - Runas
 8. Set Runas
@@ -37,7 +37,10 @@ Beta 0.9
 
 Version 1.0
 
-
+{
+    1.Filtrar por Roles
+    3.Filtreo como el del LOL.
+}
 
 
 
