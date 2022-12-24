@@ -348,9 +348,6 @@ internal class PickBan
             catch(Exception e)
             {
                 Log.Logger.Debug(e, "No se ha podido banear a {@ID}", id);
-                ///     TODO -> Hacer que cuando no pueda banear compruebe si es porque
-                ///      ese campeon ya lo ha baneado otra persona o porque ya se ha
-                ///     baneado otro campeon
             }
         }
         prePicks.Clear();

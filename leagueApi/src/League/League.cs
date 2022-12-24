@@ -110,12 +110,9 @@ public partial class League
             eventSubscribe("/lol-gameflow/v1/gameflow-phase","gameflowEvent");
             initialized = true;
         }
-
-        var data = await api.RequestHandler.GetResponseAsync<string>(HttpMethod.Get, "/lol-gameflow/v1/gameflow-phase");
         
         IsConnected = true;
         ClientConnected?.Invoke(this, EventArgs.Empty);
-        OnGameFlowEvent(data);
     }
 
     public void disconnect(){

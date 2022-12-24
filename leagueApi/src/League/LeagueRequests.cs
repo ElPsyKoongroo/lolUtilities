@@ -87,4 +87,10 @@ public partial class League
                 .ToList();
     
     }
+
+    public async Task firstRequest()
+    {
+        var data = await api.RequestHandler.GetResponseAsync<string>(HttpMethod.Get, "/lol-gameflow/v1/gameflow-phase");
+        await OnGameFlowEvent(data);
+    }
 }
