@@ -13,6 +13,8 @@ Alpha 0.3
 2.Poder salir del PickBan al desactivarlo, o cambiar los campeones al pickear antes de hacerlo
 10.Insta Pick
 
+------------------------------------------------------DONE-------------------------------------------------------------------
+
 Alpha 0.4
 7. Mostrar Algunos detalles como en que gamemode estas, etc...
 5. Perfiles de PicknBan
@@ -42,6 +44,8 @@ Version 1.0
     3.Filtreo como el del LOL.
 }
 
+Refactorizaciones:
+    -Cambiar el load/save de los perfiles de PicknBan del viewmodel a la clase PickBan
 
 
 Lista de Bugs:
