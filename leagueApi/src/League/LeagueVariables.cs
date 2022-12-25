@@ -4,6 +4,7 @@ global using LCUSharp.Websocket;
 global using LCUSharp;
 global using System.Linq;
 global using System.Text.Json;
+using LeagueUtilities.DTO;
 
 namespace LeagueUtilities;
 
@@ -33,6 +34,7 @@ public partial class League{
     private PHASES _phase;
     private bool initialized;
     private string orderToPick;
+    public SummonerJSON infoSummoner { get; private set; }
 
     private HttpClientHandler handler;
 

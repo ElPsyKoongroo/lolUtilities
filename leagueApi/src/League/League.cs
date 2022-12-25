@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using LeagueUtilities.DTO;
 
 namespace LeagueUtilities;
 
@@ -10,6 +11,7 @@ public partial class League
     {
         CreateLogger();
         _events = new Dictionary<string, EventHandler<LeagueEvent>>();
+        infoSummoner = new();
         SummonerId = 0;
 
         champsToBanId = new List<int>();
@@ -89,7 +91,7 @@ public partial class League
     public void eventDesubscribe(string uri){
         api?.EventHandler.Unsubscribe(uri);
     }
-    public async Task connect()
+    public async Task<SummonerJSON> connect()
     {
         Log.Logger.Debug("Contectando con el cliente del lol");
         api = await LeagueClientApi.ConnectAsync();
@@ -113,6 +115,7 @@ public partial class League
         
         IsConnected = true;
         ClientConnected?.Invoke(this, EventArgs.Empty);
+        return infoSummoner;
     }
 
     public void disconnect(){

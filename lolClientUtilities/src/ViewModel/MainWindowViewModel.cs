@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using CommunityToolkit.Mvvm.Input;
 using LeagueUtilities;
+using LeagueUtilities.DTO;
 using lolClientUtilities.View;
 using Serilog.Core;
 using Serilog;
@@ -19,6 +20,27 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
 {
     private readonly League _client;
     private PicknBan? picknBanView;
+    
+    private string summonerIconURL = "https://cdn.communitydragon.org/latest/profile-icon/0";
+    public string SummonerIconURL
+    {
+        get => summonerIconURL;
+        set { summonerIconURL = value; OnPropertyChange(); }
+    }
+    
+    private SummonerJSON infoSummoner;
+    public SummonerJSON InfoSummoner
+    {
+        get => infoSummoner;
+        set { infoSummoner = value; OnPropertyChange(); }
+    }
+    
+    private Visibility stackPanelVisibility;
+    public Visibility StackPanelVisibility
+    {
+        get => stackPanelVisibility; 
+        set { stackPanelVisibility = value; OnPropertyChange(); }
+    }
 
     private string text = "";
     public string Text
@@ -63,6 +85,8 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
     {
         _client = League.GetLeague();
         Log.Logger.Debug("Cliente creado");
+        stackPanelVisibility = Visibility.Hidden;
+        
     }
 
     [RelayCommand]
@@ -70,9 +94,11 @@ public partial class MainWindowViewModel : INotifyPropertyChanged
     {
         if (!_client.IsConnected)
         {
-            await _client.connect();
+            InfoSummoner = await _client.connect();
+            SummonerIconURL = $"https://cdn.communitydragon.org/latest/profile-icon/{InfoSummoner.ProfileIconId}";
             _client.HasToPick = picknBan;
             _client.HasToAutoAccept = autoAccept;
+            StackPanelVisibility = Visibility.Visible;
         }
     }
 

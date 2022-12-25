@@ -27,6 +27,7 @@ public partial class League
         );
 
         if(data is null) return;
+        infoSummoner = data;
 
         SummonerId = data.SummonerId;
 
