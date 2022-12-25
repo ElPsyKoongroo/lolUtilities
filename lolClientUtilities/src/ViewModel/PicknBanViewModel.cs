@@ -2,26 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media.Animation;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using LeagueAPI;
 using LeagueUtilities;
-using LeagueUtilities.DTO;
 using LeagueUtilities.Models;
 using lolClientUtilities.JSON_Classes;
 using lolClientUtilities.Model;
-using lolClientUtilities.View;
 using Log = Serilog.Log;
 
 
@@ -38,7 +28,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
     private ObservableCollection<ChampWithBitmap> champs;
     private string filter = "";
 
-    private bool canPickSkin = false;
+    private bool canPickSkin;
 
     public bool CanPickSkin
     {
