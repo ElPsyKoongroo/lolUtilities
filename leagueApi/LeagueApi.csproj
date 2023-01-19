@@ -8,6 +8,7 @@
     <WarningLevel>3</WarningLevel>
     <Configurations>Debug;Release;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>

@@ -16,6 +16,47 @@ public static class Program
         /*Get_Sessions s = new();
         await s.GetSessions();*/
 
+        //await RequestManual();
+
+        await CalcularEsenciasBotin();
+    }
+
+    private static async Task CalcularEsenciasBotin()
+    {
+        LeagueClientApi api = await LeagueClientApi.ConnectAsync();
+
+        var response =
+            await
+                api.RequestHandler.GetResponseAsync<List<dynamic>>(HttpMethod.Get, "/lol-loot/v1/player-loot");
+
+        Console.WriteLine("Campeones: ");
+        var total = 0;
+        foreach (var loot in response)
+        {
+            if (loot.type == "CHAMPION_RENTAL")
+            {
+                total += (int)loot.disenchantValue;
+                Console.WriteLine(loot.itemDesc + ": " + loot.disenchantValue);
+            }
+        }
+
+        Console.WriteLine("Total esencias azules: " + total);
+        total = 0;
+        Console.WriteLine("\n\nSkins: ");
+        foreach (var loot in response)
+        {
+            if (loot.type == "SKIN_RENTAL")
+            {
+                total += (int)loot.disenchantValue;
+                Console.WriteLine(loot.itemDesc + ": " + loot.disenchantValue);
+            }
+        }
+
+        Console.WriteLine("Total esencias naranjas: " + total);
+    }
+
+    private static async Task RequestManual()
+    {
         LeagueClientApi api = await LeagueClientApi.ConnectAsync();
 
 
@@ -26,26 +67,25 @@ public static class Program
         {
             return true;
         };
-        
+
         HttpClient client = new(handler);
 
         HttpRequestMessage req = new HttpRequestMessage();
         var tokenVerde = "riot:" + api.RequestHandler.Token;
         var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokenVerde));
 
-        
-        
-        
+
         req.Headers.Authorization = AuthenticationHeaderValue.Parse($"Basic {token}");
-        req.RequestUri = new Uri($"https://127.0.0.1:{api.RequestHandler.Port}/lol-game-data/assets/v1/champion-icons/1.png");
+        req.RequestUri =
+            new Uri($"https://127.0.0.1:{api.RequestHandler.Port}/lol-game-data/assets/v1/champion-icons/1.png");
         req.Method = HttpMethod.Get;
-        
+
 
         var res = await client.SendAsync(req);
 
         var data = await res.Content.ReadAsByteArrayAsync();
 
-        
+
         await File.WriteAllBytesAsync(@"C:\Users\Adrian\Desktop\LOL\data.jpg", data);
 
         Console.WriteLine("Terminado");

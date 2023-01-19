@@ -140,7 +140,6 @@ internal class PickBan
             }
         }
     }
-    
     public static bool IsConnected()
     {
         return !(_pickBan is null || _pickBan.finished);
@@ -430,7 +429,11 @@ internal class PickBan
         
         if (skinData is null) return;
 
-        var ownedSkins = skinData
+        //TODO => si no 
+        //if (notBaseSkin)
+        //    if (skinData.First(x => x.isBase).id == skinData.First(x => x.lastSelected).id) return;
+
+            var ownedSkins = skinData
             .Where(skin => skin.ownership.owned 
                 && !skin.isBase
                 && !skin.lastSelected)
