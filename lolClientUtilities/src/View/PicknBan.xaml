@@ -153,12 +153,46 @@
             </StackPanel>
             
             <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    
+                    <ComboBox x:Name="ProfileComboBox" 
+                              VerticalAlignment="Top" HorizontalAlignment="Left"
+                              Width="140" Height="20"
+                              Margin="-25,0,15,15"
+                              Foreground="Black"
+                              FontWeight="SemiBold"
+                              HorizontalContentAlignment="Center"
+                              BorderThickness="0"
+                              
+                              ItemsSource="{Binding ProfileComboBoxItems}"
+                              SelectedValue="{Binding SelectedProfileName}"
+                    >
+                        <ComboBox.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#227C70" Offset="0"/>
+                                <GradientStop Color="#106070" Offset="1"/>
+                            </LinearGradientBrush>
+                        </ComboBox.Background>
+                        
+                    </ComboBox>
+                    <Button VerticalAlignment="Top"
+                            Content="C"
+                            Command="{Binding CreateProfileCommand}"
+                        Margin="0,0,15,0"
+                    />
+                    <Button VerticalAlignment="Top"
+                            Content="D"
+                            Command="{Binding DeleteProfileCommand}"
+                            Margin="0,0,15,0"
+                    />
+                </StackPanel>
                 
                 <ComboBox x:Name="chooseComboBox" 
                           VerticalAlignment="Top" HorizontalAlignment="Left"
                           Width="140" Height="20"
                           Margin="-25,0,0,0"
                           Foreground="Black"
+                          FontWeight="SemiBold"
                           Text="{Binding OrderComboBox}"
                           HorizontalContentAlignment="Center"
                           BorderThickness="0"

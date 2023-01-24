@@ -3,6 +3,7 @@ using System.Windows.Media.Imaging;
 using LeagueUtilities.DTO;
 using LeagueUtilities.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace lolClientUtilities.Model;
 
@@ -51,6 +52,11 @@ public class ChampWithBitmap
             roles  = roles,
             squarePortraitPath = squarePortraitPath
         };
+    }
+    
+    public static IEnumerable<ChampsJSON> AsChampJSONEnumarable(IEnumerable<ChampWithBitmap> other)
+    {
+        return other.Select(x=> x.AsChampJSON());
     }
     
     private static BitmapImage LoadImage(byte[] imageData)

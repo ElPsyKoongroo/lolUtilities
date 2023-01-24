@@ -22,6 +22,7 @@ internal class PickBan
     private bool finished;
     private int PickPosition;
     private int BanPosition;
+    private Dictionary<string, List<ChampsJSON>> PickBanProfile;
 
     private string orderToPick;
 

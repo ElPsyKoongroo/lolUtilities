@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using LeagueUtilities.DB;
 using LeagueUtilities.DTO;
+using LeagueUtilities.JSON_Classes;
 
 namespace LeagueUtilities;
 
@@ -24,7 +26,8 @@ public partial class League
         IsConnected = false;
         initialized = false;
         orderToPick = "In Order";
-        
+
+        db = createDB();
         handler = new HttpClientHandler();
         
         handler.ClientCertificateOptions = ClientCertificateOption.Manual;
@@ -36,6 +39,18 @@ public partial class League
     public static League GetLeague()
     {
         return _league ??= new League();
+    }
+
+    public DBConnection createDB()
+    {
+        var appPath = Environment.CurrentDirectory;
+
+        var savesDir = Path.Combine(appPath, "data");
+        if (!Directory.Exists(savesDir))
+            Directory.CreateDirectory(savesDir);
+
+        var savesFile = Path.Combine(savesDir, "save.db");
+        return new DBConnection(savesFile);
     }
 
     public static void Dispose()
@@ -116,6 +131,76 @@ public partial class League
         IsConnected = true;
         ClientConnected?.Invoke(this, EventArgs.Empty);
         return infoSummoner;
+    }
+
+    public IEnumerable<string> LoadProfilesNames()
+    {
+        return db
+            .GetCollection<PBProfile>(DBConnection.CollectionName.PBProfiles)
+            .Select(profile => profile.Name);
+    }
+    
+    public PBProfile LoadProfile(string profileName)
+    {
+        return db
+           .GetCollection<PBProfile>(DBConnection.CollectionName.PBProfiles)
+           .First(profile => profile.Name == profileName);
+    }
+    
+    public PBProfile LoadMainProfile()
+    {
+        var main = db
+            .FindEntryByProperty(DBConnection.CollectionName.PBProfiles, (PBProfile p) => p.Name == "main")
+            .ToList();
+        if(main.Count != 0)
+        {
+            return main.First();
+        }
+        db.InsertEntry(DBConnection.CollectionName.PBProfiles, new PBProfile("main", new(), new()));
+        main = db
+            .FindEntryByProperty(DBConnection.CollectionName.PBProfiles, (PBProfile p) => p.Name == "main")
+            .ToList();
+        
+        if(main.Count == 0)
+        {
+            throw new Exception("Cant create main profile");
+        }
+        return main.First();
+    }
+
+    public void SaveProfile(PBProfile data)
+    {
+        db.UpsertEntry<PBProfile>(DBConnection.CollectionName.PBProfiles, data);
+    }
+
+    public void DeleteProfile(PBProfile data)
+    {
+        db.DeleteEntry<PBProfile>(DBConnection.CollectionName.PBProfiles, data.PBProfileId);
+    }
+    
+    public bool HasProfileChanged(PBProfile profile, IEnumerable<ChampsJSON> picks, IEnumerable<ChampsJSON> bans)
+    {
+        var entry = db.FindEntryById<PBProfile>(DBConnection.CollectionName.PBProfiles, profile.PBProfileId);
+        
+        var actualPicks = picks.ToList();
+        var actualBans = bans.ToList();
+        
+        if(entry is null)
+            return true;
+        
+        if(actualPicks.Count != entry.picks.Count) return true;
+        if(actualBans.Count != entry.bans.Count) return true;
+        
+        foreach(var pair in actualPicks.Zip(entry.picks))
+        {
+            if(pair.Item1.id != pair.Item2.id) return true;
+        }
+        
+        foreach(var pair in actualBans.Zip(entry.bans))
+        {
+            if(pair.Item1.id != pair.Item2.id) return true;
+        }
+        return false;
     }
 
     public void disconnect(){

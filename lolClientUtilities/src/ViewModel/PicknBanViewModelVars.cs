@@ -15,6 +15,7 @@ namespace lolClientUtilities.ViewModel;
 
 public partial class PicknBanViewModel
 {
+    //Order ComboBox Variables
     private string orderComboBox = "";
     public string OrderComboBox
     {
@@ -22,6 +23,39 @@ public partial class PicknBanViewModel
         set { orderComboBox = value; OnPropertyChange(); }
     }
     
+    //Profiles Variables
+    private List<string> profileComboBoxItems = new();
+    public List<string> ProfileComboBoxItems
+    {
+        get => profileComboBoxItems;
+        set { profileComboBoxItems = value; OnPropertyChange(); }
+    }
+
+    private string selectedProfileName = "";
+
+    private bool initialLoad = true;
+    public string SelectedProfileName
+    {
+        get => selectedProfileName;
+        set
+        {
+            if(initialLoad)
+            {
+                selectedProfileName = value;
+                OnPropertyChange();
+                initialLoad = false;
+            }
+            else
+            {
+                SaveProfile();
+                selectedProfileName = value;
+                OnPropertyChange();
+                LoadProfile();
+            }
+        }
+    }
+    
+    //
     public ObservableCollection<ChampWithBitmap> Champs
     {
         get => champs;

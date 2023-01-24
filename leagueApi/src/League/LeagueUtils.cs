@@ -11,7 +11,7 @@ public partial class League
         //.Filter.ByExcluding(Matching.WithProperty<int>("Count", p => p < 5))
         const string formato = "[{Timestamp:HH:mm:ss.ffffff} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-        var logFileFolder = Path.Combine(Environment.CurrentDirectory, "logs");
+        var logFileFolder = Path.Combine(Environment.CurrentDirectory, "data","logs");
         var logFilePath = Path.Combine(logFileFolder, "log_.txt");
 
         Directory.CreateDirectory(logFileFolder);

@@ -7,8 +7,11 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using CommunityToolkit.Mvvm.Input;
 using LeagueUtilities;
+using LeagueUtilities.JSON_Classes;
 using LeagueUtilities.Models;
 using lolClientUtilities.JSON_Classes;
 using lolClientUtilities.Model;
@@ -23,10 +26,12 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
 
     //private 
     private List<ChampWithBitmap> allChamps;
+    private ObservableCollection<ChampWithBitmap> champs;
     private ObservableCollection<ChampWithBitmap> champsToBan = new();
     private ObservableCollection<ChampWithBitmap> champsToPick = new();
-    private ObservableCollection<ChampWithBitmap> champs;
+    private PBProfile actualProfile;
     private string filter = "";
+    
 
     private bool canPickSkin;
 
@@ -55,7 +60,6 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
             connect(null, EventArgs.Empty);
             CanPickSkin = true;
         }
-
         Load();
     }
 
@@ -103,44 +107,91 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         ChampsToBan.Remove(champ);
         league.ModifyBans(champsToBan.Select(x=> x.id).ToList());
     }
-
+    
     [RelayCommand]
-    private void Save()
+    public void Save()
     {
-        var appPath = Environment.CurrentDirectory;
-
-        var savesDir = Path.Combine(appPath, "saves");
-        if (!Directory.Exists(savesDir))
-            Directory.CreateDirectory(savesDir);
-
-        var savesFile = Path.Combine(savesDir, "PicknBanSaves.json");
-
-        PicknBanJSON data = new()
+        SaveProfile(true);
+    }
+    
+    [RelayCommand]
+    public void CreateProfile()
+    {
+        string baseName = "Profile_";
+        int actual = 0;
+        
+        while (profileComboBoxItems.Contains($"{baseName}{++actual}")){}
+        
+        PBProfile newProfile = new($"{baseName}{actual}", new(), new());
+        profileComboBoxItems.Add(newProfile.Name);
+        league.SaveProfile(newProfile);
+        SelectedProfileName = newProfile.Name;
+    }
+    
+    [RelayCommand]
+    public void DeleteProfile()
+    {
+        /*TODO-> refactorizar para que solo te pida guardar el actual cuando se cambias el combobox,
+          no siempre que se llama a SelectedProfileName
+        */
+        if (selectedProfileName.Equals("main")) return;
+        profileComboBoxItems.Remove(actualProfile.Name);
+        league.DeleteProfile(actualProfile);
+        actualProfile = league.LoadMainProfile();
+        SelectedProfileName = "main";
+    }
+    
+    private void SaveProfile(bool force = false)
+    {
+        if(league.HasProfileChanged(actualProfile,
+                    ChampWithBitmap.AsChampJSONEnumarable(champsToPick),
+                    ChampWithBitmap.AsChampJSONEnumarable(champsToBan)))
         {
-            picks = ChampsToPick.Select(x => x.AsChampJSON()).ToList(),
-            bans = ChampsToBan.Select(x => x.AsChampJSON()).ToList()
-        };
+           if(!force)
+           {
+               DialogResult result = MessageBox.Show("Do you want to save your profile?", 
+                   "Save Profile", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+               if (result == DialogResult.No)
+                   return;
+           }
+           actualProfile.picks = ChampWithBitmap.AsChampJSONEnumarable(champsToPick).ToList();
+           actualProfile.bans = ChampWithBitmap.AsChampJSONEnumarable(champsToBan).ToList();
+           league.SaveProfile(actualProfile);
+           
+           DialogResult result1 = MessageBox.Show("Saved successfully",
+                              "Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
+           
+        }
+    }
+    
 
-        string dataSerialized = JsonSerializer.Serialize(data, new JsonSerializerOptions { IncludeFields = true });
-
-        File.WriteAllTextAsync(savesFile, dataSerialized);
+    private void LoadProfile()
+    {
+        actualProfile = league.LoadProfile(SelectedProfileName);
+        
+        champsToBan =
+            new ObservableCollection<ChampWithBitmap>(
+                actualProfile.bans.Select(x => new ChampWithBitmap(x, null)));
+        champsToPick =
+            new ObservableCollection<ChampWithBitmap>(
+                actualProfile.picks.Select(x => new ChampWithBitmap(x, null)));
+        OnPropertyChange(nameof(champsToBan));
+        OnPropertyChange(nameof(champsToPick));
     }
 
     private void Load()
     {
-        var savesFile = Path.Combine(Environment.CurrentDirectory, "saves", "PicknBanSaves.json");
-        if (!File.Exists(savesFile)) return;
+        ProfileComboBoxItems.AddRange(league.LoadProfilesNames());
+        SelectedProfileName = "main";
+        
+        actualProfile = league.LoadMainProfile();
 
-        string data = File.ReadAllText(savesFile);
-
-        PicknBanJSON dataDeserialized =
-            JsonSerializer.Deserialize<PicknBanJSON>(data, new JsonSerializerOptions { IncludeFields = true });
         champsToBan =
-            new ObservableCollection<ChampWithBitmap>(dataDeserialized.bans.Select(x => new ChampWithBitmap(x, null)));
+            new ObservableCollection<ChampWithBitmap>(
+                actualProfile.bans.Select(x => new ChampWithBitmap(x, null)));
         champsToPick =
-            new ObservableCollection<ChampWithBitmap>(dataDeserialized.picks.Select(x => new ChampWithBitmap(x, null)));
-        
-        
+            new ObservableCollection<ChampWithBitmap>(
+                actualProfile.picks.Select(x => new ChampWithBitmap(x, null)));
     }
 
     private async void connect(object? sender, EventArgs e)
@@ -173,14 +224,4 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         league.firstRequest();
 
     }
-
-    // public void onChampSelectEvent(object? sender, EventArgs e)
-    // {
-    //     List<int> bans = new();
-    //     List<int> picks = new();
-    //     ChampsToBan.ToList().ForEach(ban => bans.Add(ban.id));
-    //     ChampsToPick.ToList().ForEach(pick => picks.Add(pick.id));
-    //     league.SetPicksnBans(bans, picks, OrderComboBox);
-    //     Debug.WriteLine("Fasilito");
-    // }
 }

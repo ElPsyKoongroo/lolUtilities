@@ -5,6 +5,7 @@ global using LCUSharp;
 global using System.Linq;
 global using System.Text.Json;
 using LeagueUtilities.DTO;
+using LeagueUtilities.DB;
 
 namespace LeagueUtilities;
 
@@ -23,6 +24,7 @@ public partial class League{
     }
     
     private readonly Dictionary<string, EventHandler<LeagueEvent>> _events;
+    private DBConnection db;
     public bool IsConnected { get; private set; }
     private LeagueClientApi? api;
     private long SummonerId;

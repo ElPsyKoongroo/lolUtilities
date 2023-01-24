@@ -35,8 +35,8 @@ public static class Program
         {
             if (loot.type == "CHAMPION_RENTAL")
             {
-                total += (int)loot.disenchantValue;
-                Console.WriteLine(loot.itemDesc + ": " + loot.disenchantValue);
+                total += (int)loot.disenchantValue * (int)loot.count;
+                Console.WriteLine(loot.itemDesc + ": " + (int)loot.disenchantValue * (int)loot.count);
             }
         }
 
@@ -47,8 +47,8 @@ public static class Program
         {
             if (loot.type == "SKIN_RENTAL")
             {
-                total += (int)loot.disenchantValue;
-                Console.WriteLine(loot.itemDesc + ": " + loot.disenchantValue);
+                total += (int)loot.disenchantValue * (int)loot.count;
+                Console.WriteLine(loot.itemDesc + ": " + (int)loot.disenchantValue * (int)loot.count);
             }
         }
 
