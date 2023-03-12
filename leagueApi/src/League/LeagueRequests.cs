@@ -57,7 +57,7 @@ public partial class League
     public async Task<byte[]> manualRequest(HttpMethod Method, String uri)
     {
         HttpRequestMessage req = new HttpRequestMessage();
-        var tokenVerde = "riot:" + api.RequestHandler.Token;
+        var tokenVerde = $"riot:{api.RequestHandler.Token}";
         var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(tokenVerde));
 
         req.Headers.Authorization = AuthenticationHeaderValue.Parse($"Basic {token}");

@@ -163,9 +163,10 @@
                               FontWeight="SemiBold"
                               HorizontalContentAlignment="Center"
                               BorderThickness="0"
+                              IsSynchronizedWithCurrentItem="True"
                               
                               ItemsSource="{Binding ProfileComboBoxItems}"
-                              SelectedValue="{Binding SelectedProfileName}"
+                              SelectedValue="{Binding SelectedProfileNameComboBox}"
                     >
                         <ComboBox.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">

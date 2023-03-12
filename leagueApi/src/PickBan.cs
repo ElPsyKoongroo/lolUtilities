@@ -6,7 +6,7 @@ namespace LeagueUtilities;
 internal class PickBan
 {
     private static PickBan? _pickBan;
-    private LeagueClientApi api;
+    private readonly LeagueClientApi api;
     private readonly long SummonerId;
     private int ActorCellID;
     private int championId;
@@ -86,12 +86,12 @@ internal class PickBan
     public static void ChangeProperty(string propName, object value)
     {
         if (_pickBan is null || _pickBan.finished) return;
-        Debug.WriteLine("Changing " + propName);
+        Debug.WriteLine($"Changing {propName}");
         switch (propName)
         {
             case "HasToPicknBan":
             {
-                bool propValue = (bool)value;
+                var propValue = (bool)value;
 
                 _pickBan.HasToPicknBan = propValue;
 
@@ -104,7 +104,7 @@ internal class PickBan
                 
             case "HasToPickRandomSkin":
             {
-                bool propValue = (bool)value;
+                var propValue = (bool)value;
 
                 _pickBan.HasToPickRandomSkin = propValue;
                 break;
@@ -128,7 +128,7 @@ internal class PickBan
 
             case "HasToInstaPick":
             {
-                bool propValue = (bool)value;
+                var propValue = (bool)value;
 
                 _pickBan.HasToInstaPick = propValue;
                 break;
@@ -141,7 +141,8 @@ internal class PickBan
             }
         }
     }
-    public static bool IsConnected()
+
+    private static bool IsConnected()
     {
         return !(_pickBan is null || _pickBan.finished);
     }
@@ -255,7 +256,7 @@ internal class PickBan
         {
             case "Random":
             {
-                Random rand = new Random();
+                Random rand = new();
                 _pickBan.champsToPickId = _pickBan.champsToPickId.OrderBy(c => rand.Next()).ToList();
                 break;
             }
@@ -286,15 +287,15 @@ internal class PickBan
 
         var body = new { championId = champsToPickId[0] };
     
-        TimeSpan time = League.getTimeSpanBetween(9, 10);
+        var time = League.getTimeSpanBetween(9, 10);
         Log.Logger.Debug("Esperando {@Tiempo}", time);
         await Task.Delay(time);
 
         var response = await api
-        .RequestHandler
-        .GetJsonResponseAsync(HttpMethod.Patch,
-        $"/lol-champ-select/v1/session/actions/{prePickAction.id}", 
-        Enumerable.Empty<string>(), body);
+            .RequestHandler
+            .GetJsonResponseAsync(HttpMethod.Patch,
+            $"/lol-champ-select/v1/session/actions/{prePickAction.id}", 
+            Enumerable.Empty<string>(), body);
     
         Log.Logger.Debug("PrePick de {@Champ}", champsToPickId[0]);
     }
@@ -379,7 +380,7 @@ internal class PickBan
         
         if (!HasToInstaPick)
         {
-            TimeSpan time = League.getTimeSpanBetween(3, 4);
+            var time = League.getTimeSpanBetween(3, 4);
             Log.Logger.Debug("Esperando {@Tiempo}", time);
             await Task.Delay(time);
         }
@@ -436,8 +437,7 @@ internal class PickBan
 
             var ownedSkins = skinData
             .Where(skin => skin.ownership.owned 
-                && !skin.isBase
-                && !skin.lastSelected)
+                           && skin is { isBase: false, lastSelected: false })
             .Select(x=> x.id).ToList();
         
         Log.Logger.Debug("Total skins: {@NSkins}");

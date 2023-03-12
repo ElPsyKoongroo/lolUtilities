@@ -24,8 +24,8 @@ public partial class PicknBanViewModel
     }
     
     //Profiles Variables
-    private List<string> profileComboBoxItems = new();
-    public List<string> ProfileComboBoxItems
+    private ObservableCollection<string> profileComboBoxItems = new();
+    public ObservableCollection<string> ProfileComboBoxItems
     {
         get => profileComboBoxItems;
         set { profileComboBoxItems = value; OnPropertyChange(); }
@@ -33,25 +33,26 @@ public partial class PicknBanViewModel
 
     private string selectedProfileName = "";
 
-    private bool initialLoad = true;
+    public string SelectedProfileNameComboBox
+    {
+        get => SelectedProfileName;
+        set
+        {
+            if (value is null) return;
+            Debug.WriteLine($"V: {value}");
+            SaveProfile();
+            SelectedProfileName = value;
+            LoadProfile();
+        }
+    }
+    
     public string SelectedProfileName
     {
         get => selectedProfileName;
         set
         {
-            if(initialLoad)
-            {
-                selectedProfileName = value;
-                OnPropertyChange();
-                initialLoad = false;
-            }
-            else
-            {
-                SaveProfile();
-                selectedProfileName = value;
-                OnPropertyChange();
-                LoadProfile();
-            }
+            selectedProfileName = value;
+            OnPropertyChange();
         }
     }
     
@@ -62,22 +63,22 @@ public partial class PicknBanViewModel
         private set { champs = value; OnPropertyChange(); }
     }
     
-    private bool randomSkinChecked = false;
+    private bool randomSkinChecked;
     public bool RandomSkinChecked
     {
         get => randomSkinChecked;
         set { randomSkinChecked = value; OnPropertyChange(); league.HasToPickSkin = value; }
     }
     
-    private bool instaPickChecked = false;
+    private bool instaPickChecked;
     public bool InstaPickChecked
     {
         get => instaPickChecked;
         set { instaPickChecked = value; OnPropertyChange(); league.HasToInstaPick = value; }
     }
-    public ObservableCollection<ChampWithBitmap> ChampsToBan { get => champsToBan; }
-    public ObservableCollection<ChampWithBitmap> ChampsToPick { get => champsToPick; }
-    
+    public ObservableCollection<ChampWithBitmap> ChampsToBan => champsToBan;
+    public ObservableCollection<ChampWithBitmap> ChampsToPick => champsToPick;
+
     public string Filter
     {
         get => filter;

@@ -123,7 +123,7 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
         while (profileComboBoxItems.Contains($"{baseName}{++actual}")){}
         
         PBProfile newProfile = new($"{baseName}{actual}", new(), new());
-        profileComboBoxItems.Add(newProfile.Name);
+        ProfileComboBoxItems.Add(newProfile.Name);
         league.SaveProfile(newProfile);
         SelectedProfileName = newProfile.Name;
     }
@@ -131,42 +131,39 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
     [RelayCommand]
     public void DeleteProfile()
     {
-        /*TODO-> refactorizar para que solo te pida guardar el actual cuando se cambias el combobox,
-          no siempre que se llama a SelectedProfileName
-        */
-        if (selectedProfileName.Equals("main")) return;
-        profileComboBoxItems.Remove(actualProfile.Name);
-        league.DeleteProfile(actualProfile);
-        actualProfile = league.LoadMainProfile();
+        if (actualProfile.Name == "main") return;
+
+        if (!league.DeleteProfile(actualProfile)) return; //TODO -> mostrar aviso
+
+        ProfileComboBoxItems.Remove(actualProfile.Name);
         SelectedProfileName = "main";
+        actualProfile = league.LoadMainProfile();
     }
     
     private void SaveProfile(bool force = false)
     {
-        if(league.HasProfileChanged(actualProfile,
-                    ChampWithBitmap.AsChampJSONEnumarable(champsToPick),
-                    ChampWithBitmap.AsChampJSONEnumarable(champsToBan)))
+        if (!league.HasProfileChanged(actualProfile,
+                ChampWithBitmap.AsChampJSONEnumarable(champsToPick),
+                ChampWithBitmap.AsChampJSONEnumarable(champsToBan))) return;
+        if(!force)
         {
-           if(!force)
-           {
-               DialogResult result = MessageBox.Show("Do you want to save your profile?", 
-                   "Save Profile", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-               if (result == DialogResult.No)
-                   return;
-           }
-           actualProfile.picks = ChampWithBitmap.AsChampJSONEnumarable(champsToPick).ToList();
-           actualProfile.bans = ChampWithBitmap.AsChampJSONEnumarable(champsToBan).ToList();
-           league.SaveProfile(actualProfile);
-           
-           DialogResult result1 = MessageBox.Show("Saved successfully",
-                              "Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
-           
+            var result = MessageBox.Show("Do you want to save your profile?", 
+                "Save Profile", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.No)
+                return;
         }
+        actualProfile.picks = ChampWithBitmap.AsChampJSONEnumarable(champsToPick).ToList();
+        actualProfile.bans = ChampWithBitmap.AsChampJSONEnumarable(champsToBan).ToList();
+        league.SaveProfile(actualProfile);
+           
+        MessageBox.Show("Saved successfully",
+            "Saved", MessageBoxButtons.OK, MessageBoxIcon.None);
     }
     
 
     private void LoadProfile()
     {
+        if (string.IsNullOrEmpty(SelectedProfileName)) return;
         actualProfile = league.LoadProfile(SelectedProfileName);
         
         champsToBan =
@@ -181,11 +178,13 @@ public partial class PicknBanViewModel : INotifyPropertyChanged
 
     private void Load()
     {
-        ProfileComboBoxItems.AddRange(league.LoadProfilesNames());
+        foreach (var loadProfilesName in league.LoadProfilesNames())
+        {
+            ProfileComboBoxItems.Add(loadProfilesName);
+        }
+        actualProfile = league.LoadMainProfile();
         SelectedProfileName = "main";
         
-        actualProfile = league.LoadMainProfile();
-
         champsToBan =
             new ObservableCollection<ChampWithBitmap>(
                 actualProfile.bans.Select(x => new ChampWithBitmap(x, null)));

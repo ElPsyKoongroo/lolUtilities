@@ -51,10 +51,10 @@ public class DBConnection
         col.Upsert(data);
     }
 
-    public void DeleteEntry<T>(string collectionName, ObjectId objID)
+    public bool DeleteEntry<T>(string collectionName, ObjectId objID)
     {
         var col = db.GetCollection<T>(collectionName);
-        col.Delete(objID);
+        return col.Delete(objID);
     }
     
     public T? FindEntryById<T>(string collectionName, ObjectId objID)

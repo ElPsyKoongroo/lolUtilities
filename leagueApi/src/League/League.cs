@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Reflection.Metadata;
 using LeagueUtilities.DB;
 using LeagueUtilities.DTO;
 using LeagueUtilities.JSON_Classes;
@@ -28,20 +27,20 @@ public partial class League
         orderToPick = "In Order";
 
         db = createDB();
-        handler = new HttpClientHandler();
-        
-        handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-        handler.ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) => true;
+        handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
+            ClientCertificateOptions = ClientCertificateOption.Manual
+        };
 
-        client = new HttpClient(handler);
+        client = new(handler);
     }
 
     public static League GetLeague()
     {
         return _league ??= new League();
     }
-
-    public DBConnection createDB()
+    private static DBConnection createDB()
     {
         var appPath = Environment.CurrentDirectory;
 
@@ -170,12 +169,12 @@ public partial class League
 
     public void SaveProfile(PBProfile data)
     {
-        db.UpsertEntry<PBProfile>(DBConnection.CollectionName.PBProfiles, data);
+        db.UpsertEntry(DBConnection.CollectionName.PBProfiles, data);
     }
 
-    public void DeleteProfile(PBProfile data)
+    public bool DeleteProfile(PBProfile data)
     {
-        db.DeleteEntry<PBProfile>(DBConnection.CollectionName.PBProfiles, data.PBProfileId);
+        return db.DeleteEntry<PBProfile>(DBConnection.CollectionName.PBProfiles, data.PBProfileId);
     }
     
     public bool HasProfileChanged(PBProfile profile, IEnumerable<ChampsJSON> picks, IEnumerable<ChampsJSON> bans)
@@ -191,16 +190,8 @@ public partial class League
         if(actualPicks.Count != entry.picks.Count) return true;
         if(actualBans.Count != entry.bans.Count) return true;
         
-        foreach(var pair in actualPicks.Zip(entry.picks))
-        {
-            if(pair.Item1.id != pair.Item2.id) return true;
-        }
-        
-        foreach(var pair in actualBans.Zip(entry.bans))
-        {
-            if(pair.Item1.id != pair.Item2.id) return true;
-        }
-        return false;
+        return actualPicks.Zip(entry.picks).Any(pair => pair.Item1.id != pair.Item2.id) ||
+               actualBans.Zip(entry.bans).Any(pair => pair.Item1.id != pair.Item2.id);
     }
 
     public void disconnect(){

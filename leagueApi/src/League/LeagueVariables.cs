@@ -38,14 +38,16 @@ public partial class League{
     private string orderToPick;
     public SummonerJSON infoSummoner { get; private set; }
 
-    private HttpClientHandler handler;
+    private readonly HttpClientHandler handler;
 
-    private HttpClient client;
+    private readonly HttpClient client;
     //Temporal
     private bool hasToPick;
     private bool hasToPickSkin;
     private bool hasToInstaPick;
     private bool hasToAutoAccept;
+    
+    #region ObservableVariables
     public bool HasToPick
     {
         get => hasToPick;
@@ -94,6 +96,7 @@ public partial class League{
             }
         }
     }
+    #endregion
 
     public void onChampSelect()
     {
